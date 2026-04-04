@@ -1,0 +1,30 @@
+.NavigationBar {
+  background-color: cornflowerblue;
+  width: 100%;
+  color: white;
+  /* Assicura che la navbar sia sempre in cima se scorri la pagina */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: opacity 0.3s;
+}
+
+.nav-item:hover {
+  opacity: 0.8;
+}
+
+/* Stile automatico per il link della pagina in cui ti trovi */
+.nav-item.active {
+  border-bottom: 2px solid white;
+}

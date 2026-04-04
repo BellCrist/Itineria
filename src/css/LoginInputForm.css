@@ -1,0 +1,122 @@
+.login-text {
+    margin-top: 30px;
+    border-bottom: 2px solid black;
+}
+
+.ExternalContainer {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid black;
+}
+
+/*Contenitore più esterno*/
+.InputWindow {
+    border-radius: 30px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    margin-top: 10px;
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/*Form che si sovrappone al link di registrazione*/
+.InputContent {
+    padding: 30px 40px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    background-color: white;
+    z-index: 2;
+    position: relative;
+    margin: -10px -1px 0 -1px;
+}
+
+.btn-login-active {
+    background-color: #048F73 !important;
+    border-color: #070706;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-login-disabled {
+    background-color: #7b7979 !important;
+    border-color: #0d0d0c !important;
+    color: white;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/*Link di registrazione*/
+.subscriptionLink {
+    background-color: black;
+    position: relative;
+    padding: 5px 5px;
+    text-align: center;
+    margin-top: -45px;
+    border-top: 30px solid black;
+    z-index: 1;
+}
+
+
+.linkSubscription {
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+}
+
+.subscriptionLink p {
+    margin: 0 !important;
+    color: white;
+}
+
+.linkSubscription:hover {
+    text-decoration: underline;
+}
+
+.input-field-group .input-group-text {
+    background-color: transparent !important;
+    border-right: none !important;
+}
+
+.input-field-group .form-control {
+    border-left: none !important;
+}
+
+.input-field-group:focus-within {
+    border-radius: 0.375rem;
+    box-shadow: 0 0 0 0.25rem rgba(138, 76, 255, 0.25) !important;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.input-field-group:focus-within .input-group-text,
+.input-field-group:focus-within .form-control {
+    border-color: #8a4cff !important;
+}
+
+.input-field-group .form-control:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
+}
+
+/* Gestione bordi icone e input per il campo password*/
+.password-input-field {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    background-color: white;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.password-input-field .input-group-text,
+.password-input-field .form-control {
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.password-input-field:focus-within {
+    border-color: #8a4cff !important;
+    box-shadow: 0 0 0 0.25rem rgba(138, 76, 255, 0.25) !important;
+}
