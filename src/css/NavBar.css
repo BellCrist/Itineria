@@ -1,11 +1,12 @@
-.NavigationBar {
-  background-color: cornflowerblue;
+.navigation-bar {
+  background-color: cornflowerblue !important;
   width: 100%;
   color: white;
-  /* Assicura che la navbar sia sempre in cima se scorri la pagina */
   position: sticky;
   top: 0;
   z-index: 1000;
+  padding-top: 20px;
+  padding-bottom: 10px;
 }
 
 .logo-text {
@@ -17,14 +18,16 @@
   text-decoration: none;
   color: white;
   font-weight: 500;
-  transition: opacity 0.3s;
+  transition: all 0.3s ease;
+  opacity: 0.7;
 }
 
 .nav-item:hover {
-  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: white !important;
 }
 
-/* Stile automatico per il link della pagina in cui ti trovi */
 .nav-item.active {
-  border-bottom: 2px solid white;
+  color:#FFC107 !important;
 }
