@@ -1,0 +1,22 @@
+.footer-container {
+    background-color: #1a2a3a;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    font-size: 14px;
+    border-top: 2px solid #d4af37;
+}
+
+.footer-text {
+    margin: 0;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+}
+
+.brand-name {
+    color: #d4af37;
+    font-weight: bold;
+    margin-left: 5px;
+    text-transform: uppercase;
+}

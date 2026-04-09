@@ -24,7 +24,7 @@ function MainNavBar() {
 
     return (
         <>
-            <Navbar expand={expand} className="bg-body-tertiary mb-3 navigation-bar">
+            <Navbar expand={expand} className="bg-body-tertiary navigation-bar">
                 <Container fluid className='position-relative d-flex align-items-center justify-content-between'>
 
                     <div className='d-flex align-items-center text-center'>
@@ -35,7 +35,7 @@ function MainNavBar() {
                             <img
                                 src={logoImg}
                                 width="auto"
-                                height="60"
+                                height="80"
                                 className="d-inline-block align-top"
                                 alt="Itineria"
                             />

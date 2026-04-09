@@ -13,6 +13,7 @@ function PasswordInputComponent() {
                 <KeyFill size={20} />
             </InputGroup.Text>
             <Form.Control
+            placeholder='Password'
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

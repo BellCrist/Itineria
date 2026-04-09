@@ -1,10 +1,16 @@
+import ItineriaFueatures from '../layout/Features';
+import Footer from '../layout/Footer';
+import Hero from '../layout/Hero';
 import MainNavBar from '../layout/NavBar';
+
 function Homepage() {
 
     return (
         <>
             <MainNavBar />
-            <h1>Welcome to the Home Page</h1>
+            <Hero />
+            <ItineriaFueatures />
+            <Footer />
         </>
 
     );
