@@ -1,3 +1,4 @@
+import ExperienceSlider from '../layout/ExperienceSlider';
 import ItineriaFueatures from '../layout/Features';
 import Footer from '../layout/Footer';
 import Hero from '../layout/Hero';
@@ -10,6 +11,7 @@ function Homepage() {
             <MainNavBar />
             <Hero />
             <ItineriaFueatures />
+            <ExperienceSlider />
             <Footer />
         </>
 
