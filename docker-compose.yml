@@ -1,0 +1,17 @@
+services:
+  db-itineria:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: user-db-itineria
+      MYSQL_DATABASE: itineria_db
+      MYSQL_USER: admin-user-itineria
+      MYSQL_PASSWORD: llha23_gg#9Fa
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

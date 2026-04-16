@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-const CountrySelect = () => {
+const CountrySelect = ({ value, onChange }) => {
     const [options, setOptions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -29,6 +29,15 @@ const CountrySelect = () => {
                 placeholder="Scrivi per cercare..."
                 isSearchable={true}
                 isClearable={true}
+                value={options.find(opt => opt.value === value) || null}
+                onChange={(selectedOption) => {
+                    onChange({
+                        target: {
+                            name: 'nazione',
+                            value: selectedOption ? selectedOption.value : ''
+                        }
+                    });
+                }}
             />
         </div>
     );

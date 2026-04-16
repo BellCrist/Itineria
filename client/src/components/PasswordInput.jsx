@@ -3,9 +3,8 @@ import { EyeFill, EyeSlashFill, KeyFill } from 'react-bootstrap-icons';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-function PasswordInputComponent() {
+function PasswordInputComponent({ value, onChange }) {
     const [showPassword, setShowPassword] = useState(false);
-    const [password, setPassword] = useState("");
 
     return (
         <InputGroup className="mb-3 password-input-field">
@@ -13,10 +12,11 @@ function PasswordInputComponent() {
                 <KeyFill size={20} />
             </InputGroup.Text>
             <Form.Control
-            placeholder='Password'
+                placeholder='Password'
                 type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={value}
+                name='password'
+                onChange={onChange}
                 aria-label="Password"
                 aria-describedby="key-icon"
             />
