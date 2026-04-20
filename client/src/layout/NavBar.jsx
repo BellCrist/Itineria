@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Nav, Navbar } from 'react-bootstrap';
 import { Search } from 'react-bootstrap-icons';
 import Container from 'react-bootstrap/Container';
@@ -7,12 +7,15 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import logoImg from '../assets/Logo_Itineria_1.png';
 import AccessButton from '../components/AccessButton';
 import SearchBar from '../components/SearchBar';
+import UserProfileButton from '../components/UserProfileButton';
+import { AuthContext } from '../context/AuthContext';
 import '../css/NavBar.css';
 
 function MainNavBar() {
     const navigate = useNavigate();
     const expand = "lg";
     const [showSearch, setShowSearch] = useState(false);
+    const {user, logout} = useContext(AuthContext);
 
     const handleLogin = () => {
         navigate('/login');
@@ -75,8 +78,13 @@ function MainNavBar() {
                             </div>
 
                             <div className="gap-2 mt-3">
-                                <AccessButton label="Accedi" onClick={handleLogin} />
-                                <AccessButton label="Registrati" onClick={handleRegistration} />
+                                {user ? (<UserProfileButton />)
+                                :
+                                (<>
+                                    <AccessButton label="Accedi" onClick={handleLogin} />
+                                    <AccessButton label="Registrati" onClick={handleRegistration} />
+                                </>)}
+
                             </div>
                         </Offcanvas.Body>
                     </Navbar.Offcanvas>

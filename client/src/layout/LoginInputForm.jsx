@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { PersonFill } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -6,17 +6,54 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import PasswordInputComponent from '../components/PasswordInput';
+import { AuthContext } from '../context/AuthContext';
 import "../css/LoginInputForm.css";
 
 function LoginInputForm() {
-    const [username, setUsername] = useState("");
-    const isInvalidLogin = username.trim() === '' || password.trim() === '';
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
+    const [loginData, setLoginData] = useState({
+        email: '',
+        password: '',
+    });
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setLoginData({
+            ...loginData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const isInvalidLogin = loginData.email.trim() === '' || loginData.password.trim() === '';
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert(`${username} ha chiesto di eseguire il login`);
+
+        try {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData),
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                login(data);
+                alert("Login completato!");
+                navigate('/');
+            } else {
+                alert("Errore: " + data.message);
+            }
+        } catch (error) {
+            console.error("Errore durante la chiamata:", error);
+            alert("Il server non risponde.");
+        }
     }
 
     return (
@@ -34,14 +71,18 @@ function LoginInputForm() {
                                             <PersonFill size={20} />
                                         </InputGroup.Text>
                                         <Form.Control
-                                            placeholder="Username"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
-                                            aria-label="Username"
+                                            placeholder="Email"
+                                            name="email"
+                                            value={loginData.email}
+                                            onChange={handleChange}
+                                            aria-label="Email"
                                             aria-describedby="user-icon"
                                         />
                                     </InputGroup>
-                                    <PasswordInputComponent />
+                                    <PasswordInputComponent
+                                        value={loginData.password}
+                                        onChange={handleChange}
+                                    />
                                     <Button type="submit"
                                         disabled={isInvalidLogin}
                                         className={`d-block mx-auto mt-3 px-5 rounded-pill

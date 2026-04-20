@@ -1,22 +1,26 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import { useNavigate } from 'react-router-dom';
 import CountrySelect from '../components/CountrySelector';
 import PasswordInputComponent from '../components/PasswordInput';
+import { AuthContext } from '../context/AuthContext';
 import '../css/RegistrationForm.css';
 
 function RegistrationForm() {
+    const navigate = useNavigate();
+    const {login} = useContext(AuthContext);
     const [formData, setFormData] = useState({
-        nome: '',
-        cognome: '',
-        nazione: '',
-        città: '',
-        indirizzo: '',
-        provincia: '',
-        cap: '',
+        name: '',
+        surname: '',
+        country: '',
+        city: '',
+        address: '',
+        province: '',
+        zipCode: '',
         email: '',
         password: ''
     });
@@ -38,13 +42,17 @@ function RegistrationForm() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'include'
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                alert("Registrazione completata: " + data.message);
+                console.log(data);
+                login(data);
+                alert("Registrazione completata!");
+                navigate('/');
             } else {
                 alert("Errore: " + data.message);
             }
@@ -62,17 +70,17 @@ function RegistrationForm() {
                         <Col xs={5}>
                             <Form.Label>Nome</Form.Label>
                             <Form.Control
-                            type='text'
-                            name='nome'
-                            onChange={handleChange}
+                                type='text'
+                                name='name'
+                                onChange={handleChange}
                             />
                         </Col>
                         <Col xs={5}>
                             <Form.Label>Cognome</Form.Label>
                             <Form.Control
-                            type='text'
-                            name='cognome'
-                            onChange={handleChange}
+                                type='text'
+                                name='surname'
+                                onChange={handleChange}
                             />
                         </Col>
                     </Row>
@@ -87,9 +95,9 @@ function RegistrationForm() {
                         <Col xs={5}>
                             <Form.Label>Città</Form.Label>
                             <Form.Control
-                            type='text'
-                            name='città'
-                            onChange={handleChange}
+                                type='text'
+                                name='city'
+                                onChange={handleChange}
                             />
                         </Col>
                     </Row>
@@ -98,25 +106,25 @@ function RegistrationForm() {
                         <Col xs={5}>
                             <Form.Label>Indirizzo</Form.Label>
                             <Form.Control
-                            type='text'
-                            name='indirizzo'
-                            onChange={handleChange}
+                                type='text'
+                                name='address'
+                                onChange={handleChange}
                             />
                         </Col>
                         <Col xs={3}>
                             <Form.Label>Provincia</Form.Label>
                             <Form.Control
-                            type='text'
-                            name='provincia'
-                            onChange={handleChange}
+                                type='text'
+                                name='province'
+                                onChange={handleChange}
                             />
                         </Col>
                         <Col xs={3}>
                             <Form.Label>CAP</Form.Label>
                             <Form.Control
-                            type='text'
-                            name='cap'
-                            onChange={handleChange}
+                                type='text'
+                                name='zipCode'
+                                onChange={handleChange}
                             />
                         </Col>
                     </Row>
@@ -125,9 +133,9 @@ function RegistrationForm() {
                         <Col xs={6}>
                             <Form.Label>Email</Form.Label>
                             <Form.Control
-                            type='email'
-                            name='email'
-                            onChange={handleChange}
+                                type='email'
+                                name='email'
+                                onChange={handleChange}
                             />
                         </Col>
                     </Row>
