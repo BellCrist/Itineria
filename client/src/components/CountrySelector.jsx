@@ -33,7 +33,7 @@ const CountrySelect = ({ value, onChange }) => {
                 onChange={(selectedOption) => {
                     onChange({
                         target: {
-                            name: 'nazione',
+                            name: 'country',
                             value: selectedOption ? selectedOption.value : ''
                         }
                     });

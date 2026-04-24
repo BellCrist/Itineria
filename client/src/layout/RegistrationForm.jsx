@@ -88,8 +88,9 @@ function RegistrationForm() {
                     <Row className="mb-3 align-items-end">
                         <Col xs={5}>
                             <CountrySelect
-                                value={formData.nazione}
+                                value={formData.country}
                                 onChange={handleChange}
+                                name='country'
                             />
                         </Col>
                         <Col xs={5}>

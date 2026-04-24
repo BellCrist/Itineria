@@ -27,6 +27,12 @@ function UserProfileButton() {
         }
     }
 
+    //Indirizza verso la pagina di gestione del profilo
+    const handleProfilePage = async (e) => {
+        e.preventDefault();
+        navigate('/profile');
+    }
+
     return (
         <NavDropdown
             title={
@@ -40,6 +46,9 @@ function UserProfileButton() {
         >
             <NavDropdown.Item onClick={handleLogout}>
                 Logout
+            </NavDropdown.Item>
+            <NavDropdown.Item onClick={handleProfilePage}>
+                Profile
             </NavDropdown.Item>
         </NavDropdown>
     )

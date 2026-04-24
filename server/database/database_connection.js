@@ -9,22 +9,11 @@ const connection = await mysql.createConnection({
 
 console.log("Connected!");
 
+// Create refresh_tokens table if it doesn't exist
+/* const deleteRTColumn = `ALTER TABLE users
+DROP COLUMN refresh_token`;
 
-const sql = `
-    CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        surname VARCHAR(255) NOT NULL,
-        address VARCHAR(255) NOT NULL,
-        zipCode VARCHAR(20) NOT NULL,
-        city VARCHAR(100) NOT NULL,
-        province VARCHAR(10) NOT NULL,
-        country VARCHAR(100) NOT NULL,
-        email VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
-    )`;
-
-await connection.query(sql);
-console.log("Table 'users' verified/created");
+await connection.query(deleteRTColumn);
+console.log("Modifica eseguita"); */
 
 export default connection;
