@@ -9,11 +9,17 @@ const connection = await mysql.createConnection({
 
 console.log("Connected!");
 
-// Create refresh_tokens table if it doesn't exist
-/* const deleteRTColumn = `ALTER TABLE users
-DROP COLUMN refresh_token`;
+/* let sql = `CREATE TABLE itineraries (
+id INT AUTO_INCREMENT PRIMARY KEY,
+user_id INT NOT NULL,
+title VARCHAR(255) NOT NULL,
+description MEDIUMTEXT,
+waypoints JSON,
+details JSON,
+shareable BOOL NOT NULL
+)`;
 
-await connection.query(deleteRTColumn);
-console.log("Modifica eseguita"); */
+await connection.query(sql); */
+// console.log("Modifica eseguita");
 
 export default connection;

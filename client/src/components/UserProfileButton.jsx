@@ -33,6 +33,12 @@ function UserProfileButton() {
         navigate('/profile');
     }
 
+    //Indirizza verso l'area personale dell'utente
+    const handlePersonalItineraryPage = async (e) => {
+        e.preventDefault();
+        navigate('/personal-itinerary');
+    }
+
     return (
         <NavDropdown
             title={
@@ -47,7 +53,7 @@ function UserProfileButton() {
             <NavDropdown.Item onClick={handleProfilePage}>
                 Profile
             </NavDropdown.Item>
-            <NavDropdown.Item onClick={handleProfilePage}>
+            <NavDropdown.Item onClick={handlePersonalItineraryPage}>
                 I tuoi itinerari
             </NavDropdown.Item>
             <NavDropdown.Item onClick={handleLogout}>

@@ -1,3 +1,4 @@
+import Footer from '../layout/Footer';
 import MainNavBar from '../layout/NavBar';
 import ProfileEditor from '../layout/ProfileEditor';
 
@@ -6,6 +7,7 @@ function ProfilePage() {
         <>
             <MainNavBar />
             <ProfileEditor />
+            <Footer />
         </>
 
     )

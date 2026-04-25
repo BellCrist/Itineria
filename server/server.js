@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import authRoutes from './routes/authRoutes.js';
+import itineraryRoutes from './routes/itineraryRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user-profile', profileRoutes);
+app.use('/api/user-itinerary', itineraryRoutes)
 
 const PORT = 8080;
 app.listen(PORT, () => {

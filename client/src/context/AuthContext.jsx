@@ -8,11 +8,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const userCookie = Cookies.get('user_session');
-        if (userCookie) {
-            setUser(JSON.parse(userCookie));
-        }
-
         /**
          * Se l'access token è scaduto, chiamo il refresh.
          */
