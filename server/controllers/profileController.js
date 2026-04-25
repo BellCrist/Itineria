@@ -12,7 +12,6 @@ const getUserData = async (req, res) => {
         return res.status(401).json({ message: "Credenziali non valide" });
     }
 
-    console.log(user.name, user.surname, user.address);
     res.status(200)
         .json({
             message: 'Informazioni recuperate',

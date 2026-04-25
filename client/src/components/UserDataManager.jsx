@@ -73,12 +73,13 @@ function UserDataManager() {
 
     return (
         <>
-            <Container className="Form-container">
-                <div className='mx-auto registrationForm'>
+            <Container className="d-flex flex-column justify-content-center align-items-center external-container">
+                <h3>Informazioni personali</h3>
+                <div className='mx-auto w-100 shadow p-5 rounded-5 bg-white form-container' style={{ maxWidth: '800px' }}>
                     <Form onSubmit={handleSubmit}>
-                        <Row className="mb-3">
-                            <Col xs={5}>
-                                <Form.Label>Nome</Form.Label>
+                        <Row className="my-3">
+                            <Col xs={10} md={8} lg={7}>
+                                <Form.Label><strong>Nome</strong></Form.Label>
                                 <Form.Control
                                     type='text'
                                     name='name'
@@ -87,9 +88,9 @@ function UserDataManager() {
                                 />
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs={5}>
-                                <Form.Label>Cognome</Form.Label>
+                        <Row className="my-3">
+                            <Col xs={10} md={8} lg={7}>
+                                <Form.Label><strong>Cognome</strong></Form.Label>
                                 <Form.Control
                                     type='text'
                                     name='surname'
@@ -98,9 +99,9 @@ function UserDataManager() {
                                 />
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs={5}>
-                                <Form.Label>Paese</Form.Label>
+                        <Row className="my-3">
+                            <Col xs={10} md={8} lg={7}>
+                                <Form.Label><strong>Paese</strong></Form.Label>
                                 <Form.Control
                                     type='text'
                                     name='country'
@@ -109,9 +110,9 @@ function UserDataManager() {
                                 />
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs={5}>
-                                <Form.Label>Città</Form.Label>
+                        <Row className="my-3">
+                            <Col xs={10} md={8} lg={7}>
+                                <Form.Label><strong>Città</strong></Form.Label>
                                 <Form.Control
                                     type='text'
                                     name='city'
@@ -120,9 +121,9 @@ function UserDataManager() {
                                 />
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs={5}>
-                                <Form.Label>Indirizzo</Form.Label>
+                        <Row className="my-3">
+                            <Col xs={10} md={8} lg={7}>
+                                <Form.Label><strong>Indirizzo</strong></Form.Label>
                                 <Form.Control
                                     type='text'
                                     name='address'
@@ -131,9 +132,9 @@ function UserDataManager() {
                                 />
                             </Col>
                         </Row>
-                        <Row>
-                            <Col xs={5}>
-                                <Form.Label>CAP</Form.Label>
+                        <Row className="my-3">
+                            <Col xs={10} md={8} lg={7}>
+                                <Form.Label><strong>CAP</strong></Form.Label>
                                 <Form.Control
                                     type='text'
                                     name='zipCode'
@@ -143,7 +144,7 @@ function UserDataManager() {
                             </Col>
                         </Row>
 
-                        <Button variant="primary" type="submit">
+                        <Button className='my-3' variant="primary" type="submit">
                             SALVA
                         </Button>
                     </Form>

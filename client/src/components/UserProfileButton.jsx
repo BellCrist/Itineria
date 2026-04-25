@@ -44,12 +44,16 @@ function UserProfileButton() {
             id="user-option-menu"
             align="end"
         >
-            <NavDropdown.Item onClick={handleLogout}>
-                Logout
-            </NavDropdown.Item>
             <NavDropdown.Item onClick={handleProfilePage}>
                 Profile
             </NavDropdown.Item>
+            <NavDropdown.Item onClick={handleProfilePage}>
+                I tuoi itinerari
+            </NavDropdown.Item>
+            <NavDropdown.Item onClick={handleLogout}>
+                Logout
+            </NavDropdown.Item>
+
         </NavDropdown>
     )
 }
