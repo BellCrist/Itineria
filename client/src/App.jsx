@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
+import ItineraryDetailPage from './pages/ItineraryDetailPage';
 import ItineraryManagerPage from './pages/ItineraryManagerPage';
 import LoginPage from './pages/LoginPage';
+import NewItineraryPage from './pages/NewItineraryPage';
 import ProfilePage from './pages/ProfilePage';
 import RegistrationPage from './pages/RegistrationPage';
 
@@ -27,10 +29,17 @@ function App() {
           </ProtectedRoute>
         } />
 
+{/**Rotta per la visualizzazione in dettaglio di un itinerario */}
+        <Route path='/personal-itinerary/:id' element={
+          <ProtectedRoute>
+            <ItineraryDetailPage />
+          </ProtectedRoute>
+        } />
+
 {/**Rotta per la creazione di un nuovo itinerario */}
         <Route path='/personal-itinerary/new-itinerary' element={
           <ProtectedRoute>
-            <ProfilePage />
+            <NewItineraryPage />
           </ProtectedRoute>
         } />
 

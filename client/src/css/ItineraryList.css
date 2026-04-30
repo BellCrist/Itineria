@@ -1,0 +1,21 @@
+.itinerary-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.itinerary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+}
+
+.itinerary-card-hover {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.itinerary-card:hover .itinerary-card-hover {
+    opacity: 1;
+}

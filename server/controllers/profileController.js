@@ -30,7 +30,6 @@ const saveUserData = async (req, res) => {
     WHERE id=?`;
 
     const params = [name, surname, country, city, address, province, zipCode, userId];
-    console.log(params);
     try {
         const [result] = await db.execute(
             sql,
