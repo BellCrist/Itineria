@@ -24,7 +24,8 @@ const getItineraryList = async (req, res) => {
 }
 
 //Recupera un singolo itinerario di un utente
-const getItineraryById = async (req, res) => {;
+const getItineraryById = async (req, res) => {
+    ;
     const userData = JSON.parse(req.cookies.user_session);
     const { id } = req.params;
 
@@ -144,4 +145,31 @@ const updateItinerary = async (req, res) => {
     }
 }
 
-export default { getItineraryList, getItineraryById, createItinerary, updateItinerary };
+const deleteItinerary = async (req, res) => {
+    const { id } = req.params;
+    const sql = `DELETE FROM itineraries WHERE id = ?`;
+
+    try {
+        const [result] = await db.execute(sql, [id]);
+        if (result) {
+            res.status(200)
+                .json({
+                    success: true,
+                    message: 'Itinerario eliminato con successo'
+                });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: "Itinerario non eliminato."
+            });
+        }
+    } catch (error) {
+        console.error('Errore cancellazione itinerario:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Errore interno del server.'
+        });
+    }
+}
+
+export default { getItineraryList, getItineraryById, createItinerary, updateItinerary, deleteItinerary };
