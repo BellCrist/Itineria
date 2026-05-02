@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react';
-import { Button, Nav, Navbar } from 'react-bootstrap';
-import { Search } from 'react-bootstrap-icons';
+import { useContext } from 'react';
+import { Nav, Navbar } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -14,8 +13,7 @@ import '../css/NavBar.css';
 function MainNavBar() {
     const navigate = useNavigate();
     const expand = "lg";
-    const [showSearch, setShowSearch] = useState(false);
-    const {user, logout} = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
 
     const handleLogin = () => {
         navigate('/login');
@@ -28,30 +26,60 @@ function MainNavBar() {
     return (
         <>
             <Navbar expand={expand} className="bg-body-tertiary navigation-bar">
-                <Container fluid className='position-relative d-flex align-items-center justify-content-between'>
+                <Container fluid>
 
-                    <div className='d-flex align-items-center text-center'>
-                        <div className='d-lg-none'>
-                            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
+                    <div className="row w-100 align-items-center m-0">
+
+                        <div className="col-4 col-lg-3 d-flex align-items-center p-0">
+                            <div className='d-lg-none'>
+                                <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
+                            </div>
+                            <Navbar.Brand href="#">
+                                <img
+                                    src={logoImg}
+                                    width="auto"
+                                    height="80"
+                                    className="d-inline-block align-top"
+                                    alt="Itineria"
+                                />
+                            </Navbar.Brand>
                         </div>
-                        <Navbar.Brand href="#" className='m-0'>
-                            <img
-                                src={logoImg}
-                                width="auto"
-                                height="80"
-                                className="d-inline-block align-top"
-                                alt="Itineria"
-                            />
-                        </Navbar.Brand>
+
+                        {/** Blocco centrale con searchbar e link */}
+                        <div className="col-4 col-lg-6 d-flex flex-column align-items-center p-0">
+
+                            {/* SearchBar sempre visibile nella Navbar */}
+                            <div className="w-100 d-flex justify-content-center">
+                                <SearchBar />
+                            </div>
+
+                            {/* Nav Links visibili SOLO in desktop (d-none d-lg-flex) */}
+                            <Nav className="d-none d-lg-flex justify-content-center">
+                                <Nav.Link as={NavLink} className="nav-item mx-2" to="/">Home</Nav.Link>
+                                <Nav.Link as={NavLink} className="nav-item mx-2" to="/itinerari">I nostri itinerari</Nav.Link>
+                                <Nav.Link as={NavLink} className="nav-item mx-2" to="/about">About</Nav.Link>
+                                <Nav.Link as={NavLink} className="nav-item mx-2" to="/contatti">Contatti</Nav.Link>
+                            </Nav>
+                        </div>
+
+                        <div className="col-4 col-lg-3 text-end p-0 justify-content-end">
+                            {user ? (
+                                <div className="d-inline-block">
+                                    <UserProfileButton />
+                                </div>
+                            )
+                                :
+                                (<div className="d-none d-sm-inline-flex gap-2">
+                                    <AccessButton label="Accedi" onClick={handleLogin} />
+                                    <AccessButton label="Registrati" onClick={handleRegistration} />
+                                </div>
+                                )}
+                        </div>
                     </div>
 
-                    <div className='order-2 d-lg-none'>
-                        <Button variant="link" className='text-dark me-2' onClick={() => setShowSearch(true)}>
-                            <Search size={20} />
-                        </Button>
-                    </div>
 
 
+                    {/** l'offcanvas che racchiude le voci della navbar nel menu laterale */}
                     <Navbar.Offcanvas
                         id={`offcanvasNavbar-expand-${expand}`}
                         aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
@@ -65,10 +93,7 @@ function MainNavBar() {
                         </Offcanvas.Header>
 
                         <Offcanvas.Body>
-                            <div className='d-flex flex-column mx-auto'>
-                                <div className="d-none d-lg-block">
-                                    <SearchBar />
-                                </div>
+                            <div className='d-lg-none d-flex flex-column mx-auto'>
                                 <Nav className="justify-content-center flex-grow-1 pe-3">
                                     <Nav.Link as={NavLink} className="nav-item" to="/">Home</Nav.Link>
                                     <Nav.Link as={NavLink} className="nav-item" to="/itinerari">I nostri itinerari</Nav.Link>
@@ -77,33 +102,12 @@ function MainNavBar() {
                                 </Nav>
                             </div>
 
-                            <div className="gap-2 mt-3">
-                                {user ? (<UserProfileButton />)
-                                :
-                                (<>
-                                    <AccessButton label="Accedi" onClick={handleLogin} />
-                                    <AccessButton label="Registrati" onClick={handleRegistration} />
-                                </>)}
-
-                            </div>
                         </Offcanvas.Body>
                     </Navbar.Offcanvas>
 
                 </Container>
             </Navbar >
-
-            {
-                showSearch && (
-                    <div className="p-2 bg-white d-lg-none border-bottom position-absolute w-100" style={{ zIndex: 1050 }}>
-                        <div className="d-flex align-items-center">
-                            <SearchBar className="flex-grow-1" />
-                            <Button variant="close" className="ms-2" onClick={() => setShowSearch(false)} />
-                        </div>
-                    </div>
-                )
-            }
         </>
     );
 }
-
 export default MainNavBar;

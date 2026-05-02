@@ -1,7 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import '../css/Features.css';
 
-function ItineriaFueatures() {
+function ItineriaFeatures() {
     return (
         <Container className="my-5 external-container">
             <Row className='justify-content-center g-5'>
@@ -69,4 +69,4 @@ function ItineriaFueatures() {
     )
 }
 
-export default ItineriaFueatures;
+export default ItineriaFeatures;

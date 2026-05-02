@@ -49,9 +49,10 @@ function UserProfileButton() {
             }
             id="user-option-menu"
             align="end"
+            menuVariant="dark"
         >
             <NavDropdown.Item onClick={handleProfilePage}>
-                Profile
+                Profilo
             </NavDropdown.Item>
             <NavDropdown.Item onClick={handlePersonalItineraryPage}>
                 I tuoi itinerari
