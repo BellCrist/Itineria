@@ -25,7 +25,6 @@ const getItineraryList = async (req, res) => {
 
 //Recupera un singolo itinerario di un utente
 const getItineraryById = async (req, res) => {
-    ;
     const userData = JSON.parse(req.cookies.user_session);
     const { id } = req.params;
 
@@ -145,12 +144,16 @@ const updateItinerary = async (req, res) => {
     }
 }
 
+//Cancellazione di un itinerario
 const deleteItinerary = async (req, res) => {
     const { id } = req.params;
-    const sql = `DELETE FROM itineraries WHERE id = ?`;
+    const sessionData = JSON.parse(req.cookies.user_session);
+    const userId = sessionData.id;
+
+    const sql = `DELETE FROM itineraries WHERE id = ? AND user_id = ?`;
 
     try {
-        const [result] = await db.execute(sql, [id]);
+        const [result] = await db.execute(sql, [id,userId]);
         if (result) {
             res.status(200)
                 .json({
@@ -172,4 +175,34 @@ const deleteItinerary = async (req, res) => {
     }
 }
 
-export default { getItineraryList, getItineraryById, createItinerary, updateItinerary, deleteItinerary };
+//Ricerca di itinerari in base alla destinazione passata come parametro
+const searchItineraries = async (req, res) => {
+    const { destination } = req.query;
+    if (!destination) {
+        return res.status(400).json({ error: "Inserisci un termine di ricerca" });
+    }
+
+    try {
+        const sql = `
+            SELECT DISTINCT i.*
+            FROM itineraries i
+            JOIN JSON_TABLE(
+                i.waypoints,
+                '$[*]' COLUMNS(
+                    dest VARCHAR(255) PATH '$.destination'
+                )
+            ) AS jt
+            WHERE jt.dest LIKE ?
+        `;
+
+        // %${city}% cercherà il testo in qualsiasi posizione della stringa
+        const [rows] = await pool.execute(sql, [`%${city}%`]);
+
+        res.json(rows);
+    } catch (error) {
+        console.error("Errore DB:", err);
+        res.status(500).json({ error: "Errore durante la ricerca nel database" });
+    }
+}
+
+export default { getItineraryList, getItineraryById, createItinerary, updateItinerary, deleteItinerary, searchItineraries };

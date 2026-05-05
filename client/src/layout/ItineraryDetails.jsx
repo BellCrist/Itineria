@@ -23,12 +23,17 @@ function ItineraryDetails({ id }) {
     });
 
     const [editingField, setEditingField] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const hasChanges = JSON.stringify(itineraryDetails) !== JSON.stringify(originalDetails);
 
     useEffect(() => {
         const loadItineraryDetail = async () => {
+            setLoading(true);
+            setError(null);
+
             try {
-                const response = await fetch(`http://localhost:8080/api/user-itinerary/${id}`, {
+                const response = await fetch(`http://localhost:8080/api/itineraries/${id}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -37,10 +42,22 @@ function ItineraryDetails({ id }) {
                     const data = await response.json();
                     setItineraryDetails(data);
                     setOriginalDetails(data);
+                    setLoading(false);
+                } else if (response.status === 404) {
+                    setError('Itinerario non trovato o non disponibile');
+                    setLoading(false);
+                } else if (response.status === 403) {
+                    setError('Non sei autorizzato ad accedere a questo itinerario');
+                    setLoading(false);
+                } else {
+                    const errorData = await response.json();
+                    setError(errorData.message || 'Errore nel caricamento dell\'itinerario');
+                    setLoading(false);
                 }
             } catch (error) {
                 console.error('Errore caricamento dettagli itinerario:', error);
-                setItineraryDetails(null);
+                setError('Errore nel caricamento dell\'itinerario. Verifica la connessione.');
+                setLoading(false);
             }
         }
 
@@ -122,7 +139,7 @@ function ItineraryDetails({ id }) {
 
         if (isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:8080/api/user-itinerary/${id}`, {
+                const response = await fetch(`http://localhost:8080/api/itineraries/${id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
@@ -148,7 +165,7 @@ function ItineraryDetails({ id }) {
                 privateItinerary: itineraryDetails.shareable
             };
 
-            const response = await fetch(`http://localhost:8080/api/user-itinerary/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/itineraries/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -170,9 +187,49 @@ function ItineraryDetails({ id }) {
         }
     }
 
+    // Mostra messaggio di caricamento
+    if (loading) {
+        return (
+            <div className="container my-4">
+                <Container className='bg-white rounded-5 shadow p-4 text-center'>
+                    <p className="fs-5">Caricamento...</p>
+                </Container>
+            </div>
+        );
+    }
+
+    // Mostra messaggio di errore
+    if (error) {
+        return (
+            <div className="container my-4">
+                <Container className='bg-white rounded-5 shadow p-4'>
+                    <div className="alert alert-danger" role="alert">
+                        <h4 className="alert-heading">Errore</h4>
+                        <p>{error}</p>
+                        <hr />
+                        <Button
+                            variant="primary"
+                            onClick={() => navigate('/personal-itinerary')}
+                        >
+                            Torna alla lista degli itinerari
+                        </Button>
+                    </div>
+                </Container>
+            </div>
+        );
+    }
+
     return (
-        <div className="container my-4">
-            <h1>Dettaglio itinerario</h1>
+        <div className="container my-4 mt-4">
+            <div className='my-3'>
+                <Button
+                    variant="dark"
+                    onClick={() => navigate('/personal-itinerary')}
+                >
+                    ← Lista itinerari
+                </Button>
+            </div>
+
             <Container className='bg-white rounded-5 shadow p-4 position-relative'>
                 <Button
                     variant="danger"
@@ -184,7 +241,7 @@ function ItineraryDetails({ id }) {
                     <span className="d-none d-md-inline ms-2">Elimina</span>
                 </Button>
 
-                <div className='mx-auto registrationForm'>
+                <div className='registrationForm'>
                     <Form onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <Col xs={10}>
@@ -357,9 +414,15 @@ function ItineraryDetails({ id }) {
                             + Aggiungi un'altra tappa
                         </Button>
 
-                        <div className="d-grid gap-2">
-                            <Button variant="primary" type="submit" size="lg" disabled={!hasChanges}>
+                        <div className="d-flex justify-content-between">
+                            <Button variant="primary" type="submit" size="md" disabled={!hasChanges}>
                                 Salva modifiche
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={() => navigate('/personal-itinerary')}
+                            >
+                                Annulla
                             </Button>
                         </div>
                     </Form>

@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user-profile', profileRoutes);
-app.use('/api/user-itinerary', itineraryRoutes)
+app.use('/api/itineraries/', itineraryRoutes);
 
 const PORT = 8080;
 app.listen(PORT, () => {
