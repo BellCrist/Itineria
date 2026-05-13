@@ -224,9 +224,9 @@ function ItineraryDetails({ id }) {
             <div className='my-3'>
                 <Button
                     variant="dark"
-                    onClick={() => navigate('/personal-itinerary')}
+                    onClick={() => navigate(-1)}
                 >
-                    ← Lista itinerari
+                    ← Indietro
                 </Button>
             </div>
 

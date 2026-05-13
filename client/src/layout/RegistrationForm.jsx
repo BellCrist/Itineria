@@ -49,7 +49,6 @@ function RegistrationForm() {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
                 login(data);
                 alert("Registrazione completata!");
                 navigate('/');

@@ -2,24 +2,16 @@ import { useState } from 'react';
 import { Button, InputGroup } from 'react-bootstrap';
 import { Search } from 'react-bootstrap-icons';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from 'react-router-dom';
 import '../css/SearchBar.css';
 
 function SearchBar() {
     const [searchValue, setSearchValue] = useState("");
-    const [searchResult, setSearchResult] = useState(null);
+    const navigate = useNavigate();
 
-    const handleSearch = async (destination) => {
+    const handleSearch = (destination) => {
         if (!destination) return alert("Inserisci qualcosa!");
-        try {
-            const response = await fetch(`http://localhost:8080/api/itineraries/search?destination=${encodeURIComponent(destination)}`);
-            const data = await response.json();
-
-            setSearchResult(data);
-            //TODO mostrare il risultato della ricerca a video
-        } catch (error) {
-            console.error("Errore nella chiamata:", error);
-        }
-
+        navigate(`/search?destination=${encodeURIComponent(destination)}`);
     };
 
     return (

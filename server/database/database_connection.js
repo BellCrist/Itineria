@@ -9,17 +9,11 @@ const connection = await mysql.createConnection({
 
 console.log("Connected!");
 
-/* let sql = `CREATE TABLE itineraries (
-id INT AUTO_INCREMENT PRIMARY KEY,
-user_id INT NOT NULL,
-title VARCHAR(255) NOT NULL,
-description MEDIUMTEXT,
-waypoints JSON,
-details JSON,
-shareable BOOL NOT NULL
-)`;
+/* let sql = `ALTER TABLE itineraries
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`;
 
-await connection.query(sql); */
-// console.log("Modifica eseguita");
+await connection.query(sql);
+console.log("Modifica eseguita"); */
 
 export default connection;

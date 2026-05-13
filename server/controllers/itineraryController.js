@@ -1,19 +1,22 @@
-import db from '../database/database_connection.js';
+import { Op } from 'sequelize';
+import db from '../database/models/index.js';
 
 //Lista di itinerari dell'utente loggato
 const getItineraryList = async (req, res) => {
     const cookieData = req.cookies.user_session;
 
+    if (!cookieData) {
+        return res.status(401).json({ message: "Non autenticato" });
+    }
+
     const userData = JSON.parse(cookieData);
 
     try {
-        const [results] = await db.execute('SELECT * from itineraries WHERE user_id=?', [userData.id]);
-        if (results) {
-            res.status(200)
-                .json(results);
-        } else {
-            return res.status(401).json({ message: "Ricerca non completata" });
-        }
+        const results = await db.Itinerary.findAll({
+            where: { userId: userData.id }
+        });
+
+        res.status(200).json(results);
     } catch (error) {
         console.error("Errore ricerca itinerari dell'utente:", error);
         return res.status(500).json({
@@ -25,22 +28,27 @@ const getItineraryList = async (req, res) => {
 
 //Recupera un singolo itinerario di un utente
 const getItineraryById = async (req, res) => {
+    if (!req.cookies.user_session) {
+        return res.status(401).json({ message: "Non autenticato" });
+    }
     const userData = JSON.parse(req.cookies.user_session);
     const { id } = req.params;
 
     try {
-        const [results] = await db.execute(
-            'SELECT * FROM itineraries WHERE id = ? AND user_id = ?',
-            [id, userData.id]
-        );
+        const result = await db.Itinerary.findOne({
+            where: {
+                id: id,
+                userId: userData.id
+            }
+        });
 
-        if (results && results.length > 0) {
-            res.status(200).json(results[0]);
+        if (result) {
+            res.status(200).json(result);
         } else {
             return res.status(404).json({ message: "Itinerario non trovato" });
         }
     } catch (error) {
-        console.error("Errore ricerca itinerario:", error);
+        console.error("Errore recupero itinerario:", error);
         return res.status(500).json({
             success: false,
             message: "Errore interno del server."
@@ -51,31 +59,35 @@ const getItineraryById = async (req, res) => {
 //Creazione di un nuovo itinerario
 const createItinerary = async (req, res) => {
     const { tripName, tripDescription, waypoints, privateItinerary } = req.body;
+    if (!req.cookies.user_session) {
+        return res.status(401).json({ message: "Non autenticato" });
+    }
     const sessionData = JSON.parse(req.cookies.user_session);
     const userId = sessionData.id;
 
-    const sql = `INSERT INTO itineraries (user_id, title, description, waypoints, shareable)
-    VALUES (?,?,?,?,?)`;
     try {
-        const [result] = await db.execute(
-            sql,
-            [userId, tripName, tripDescription, waypoints, privateItinerary]
-        );
+        const newItinerary = await db.Itinerary.create({
+            userId: userId,
+            title: tripName,
+            description: tripDescription,
+            waypoints: waypoints,
+            shareable: privateItinerary
+        });
 
-        if (result.insertId) {
+        if (newItinerary.id) {
             res.status(201)
                 .json({
                     success: true,
-                    message: 'Modifiche salvate con successo'
+                    message: 'Itinerario creato con successo'
                 });
         } else {
-            return res.status(404).json({
+            return res.status(500).json({
                 success: false,
                 message: "Itinerario non salvato."
             });
         }
     } catch (error) {
-        console.error("Errore modifica dati profilo utente:", error);
+        console.error("Errore creazione itinerario:", error);
         return res.status(500).json({
             success: false,
             message: "Errore interno del server."
@@ -87,54 +99,44 @@ const createItinerary = async (req, res) => {
 const updateItinerary = async (req, res) => {
     const { id } = req.params;
     const { tripName, tripDescription, waypoints, privateItinerary } = req.body;
+    if (!req.cookies.user_session) {
+        return res.status(401).json({ message: "Non autenticato" });
+    }
     const sessionData = JSON.parse(req.cookies.user_session);
     const userId = sessionData.id;
 
-    if (!tripName && !tripDescription && !waypoints && typeof privateItinerary === 'undefined') {
+    const updateData = {};
+    if (tripName !== undefined) updateData.title = tripName;
+    if (tripDescription !== undefined) updateData.description = tripDescription;
+    if (waypoints !== undefined) updateData.waypoints = waypoints;
+    if (privateItinerary !== undefined) updateData.shareable = privateItinerary;
+
+    if (Object.keys(updateData).length === 0) {
         return res.status(400).json({
             success: false,
             message: 'Nessun campo da aggiornare fornito.'
         });
     }
 
-    const fields = [];
-    const values = [];
-
-    if (tripName !== undefined) {
-        fields.push('title = ?');
-        values.push(tripName);
-    }
-    if (tripDescription !== undefined) {
-        fields.push('description = ?');
-        values.push(tripDescription);
-    }
-    if (waypoints !== undefined) {
-        fields.push('waypoints = ?');
-        values.push(waypoints);
-    }
-    if (privateItinerary !== undefined) {
-        fields.push('shareable = ?');
-        values.push(privateItinerary);
-    }
-
-    values.push(id, userId);
-
-    const sql = `UPDATE itineraries SET ${fields.join(', ')} WHERE id = ? AND user_id = ?`;
-
     try {
-        const [result] = await db.execute(sql, values);
+        const [affectedRows] = await db.Itinerary.update(updateData, {
+            where: {
+                id: id,
+                userId: userId
+            }
+        });
 
-        if (result.affectedRows > 0) {
+        if (affectedRows === 1) {
             return res.status(200).json({
                 success: true,
                 message: 'Itinerario aggiornato con successo.'
             });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: 'Itinerario non trovato o non autorizzato.'
+            });
         }
-
-        return res.status(404).json({
-            success: false,
-            message: 'Itinerario non trovato o non autorizzato.'
-        });
     } catch (error) {
         console.error('Errore aggiornamento itinerario:', error);
         return res.status(500).json({
@@ -142,19 +144,38 @@ const updateItinerary = async (req, res) => {
             message: 'Errore interno del server.'
         });
     }
+
+    if (result.affectedRows > 0) {
+        return res.status(200).json({
+            success: true,
+            message: 'Itinerario aggiornato con successo.'
+        });
+    }
+
+    return res.status(404).json({
+        success: false,
+        message: 'Itinerario non trovato o non autorizzato.'
+    });
 }
 
 //Cancellazione di un itinerario
 const deleteItinerary = async (req, res) => {
     const { id } = req.params;
+    if (!req.cookies.user_session) {
+        return res.status(401).json({ message: "Non autenticato" });
+    }
     const sessionData = JSON.parse(req.cookies.user_session);
     const userId = sessionData.id;
 
-    const sql = `DELETE FROM itineraries WHERE id = ? AND user_id = ?`;
-
     try {
-        const [result] = await db.execute(sql, [id,userId]);
-        if (result) {
+        const deletedRows = await db.Itinerary.destroy({
+            where: {
+                id: id,
+                userId: userId
+            }
+        });
+
+        if (deletedRows === 1) {
             res.status(200)
                 .json({
                     success: true,
@@ -163,7 +184,7 @@ const deleteItinerary = async (req, res) => {
         } else {
             return res.status(404).json({
                 success: false,
-                message: "Itinerario non eliminato."
+                message: 'Itinerario non trovato o non autorizzato'
             });
         }
     } catch (error) {
@@ -183,24 +204,29 @@ const searchItineraries = async (req, res) => {
     }
 
     try {
-        const sql = `
-            SELECT DISTINCT i.*
-            FROM itineraries i
-            JOIN JSON_TABLE(
-                i.waypoints,
-                '$[*]' COLUMNS(
-                    dest VARCHAR(255) PATH '$.destination'
+        // Usiamo db.Itinerary (assicurati che il nome del modello sia corretto)
+        const itineraries = await db.Itinerary.findAll({
+            where: {
+                shareable: 1,
+
+                // Sequelize.where esegue la funzione MySQL JSON_SEARCH in modo sicuro
+                [Op.and]: db.sequelize.where(
+                    db.sequelize.fn(
+                        'JSON_SEARCH',
+                        db.sequelize.col('waypoints'),
+                        'one',                         // Cerca la prima occorrenza
+                        `%${destination}%`,
+                        null,                          // Nessun carattere di escape speciale
+                        '$[*].destination'             // Cerca solo nelle chiavi 'destination'
+                    ),
+                    { [Op.not]: null } // Se JSON_SEARCH non restituisce NULL, significa che c'è un match
                 )
-            ) AS jt
-            WHERE jt.dest LIKE ?
-        `;
+            }
+        });
 
-        // %${city}% cercherà il testo in qualsiasi posizione della stringa
-        const [rows] = await pool.execute(sql, [`%${city}%`]);
-
-        res.json(rows);
+        res.status(200).json(itineraries);
     } catch (error) {
-        console.error("Errore DB:", err);
+        console.error("Errore DB:", error);
         res.status(500).json({ error: "Errore durante la ricerca nel database" });
     }
 }

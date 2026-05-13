@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import NewItineraryPage from './pages/NewItineraryPage';
 import ProfilePage from './pages/ProfilePage';
 import RegistrationPage from './pages/RegistrationPage';
+import SearchResultsPage from './pages/SearchResultsPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/FAQ" element={null} />
         <Route path="/profile" element={
           <ProtectedRoute>

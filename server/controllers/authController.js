@@ -1,68 +1,74 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import db from '../database/database_connection.js';
+import { Op } from 'sequelize';
+import db from '../database/models/index.js';
 
 
 //Registrazione di un nuovo utente con salvataggio nel db delle rispettive informazioni:
 const registerUser = async (req, res) => {
     const { name, surname, country, city, address, province, zipCode, email, password } = req.body;
-    const sql = "INSERT INTO users (name, surname, country, city, address, province, zipCode, email, password) VALUES (?,?,?,?,?,?,?,?,?)";
 
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const [result] = await db.execute(
-            sql,
-            [name, surname, country, city, address, province, zipCode, email, hashedPassword]
+        const newUser = await db.User.create({
+            name: name,
+            surname: surname,
+            address: address,
+            zipCode: zipCode,
+            city: city,
+            province: province,
+            country: country,
+            email: email,
+            password: hashedPassword
+        });
+
+        console.log("New user's auto-generated ID:", newUser.id);
+
+        // Generate tokens
+        const accessToken = jwt.sign(
+            { id: newUser.id, email: email, name: name, surname: surname },
+            process.env.JWT_SECRET,
+            { expiresIn: '15m' } // Short-lived access token
         );
 
-        if (result.insertId) {
-            // Generate tokens
-            const accessToken = jwt.sign(
-                { id: result.insertId, email: email, name: name, surname: surname },
-                process.env.JWT_SECRET,
-                { expiresIn: '15m' } // Short-lived access token
-            );
+        const refreshToken = crypto.randomBytes(64).toString('hex');
+        const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+        const refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-            const refreshToken = crypto.randomBytes(64).toString('hex');
-            const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
-            const refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+        // Store refresh token hash in database
+        await db.RefreshToken.create({
+            userId: newUser.id,
+            token: refreshTokenHash,
+            expiresAt: refreshTokenExpiry
+        });
 
-            // Store refresh token hash in database
-            await db.execute(
-                'INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)',
-                [result.insertId, refreshTokenHash, refreshTokenExpiry]
-            );
+        const accessTokenOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax',
+            maxAge: 15 * 60 * 1000 // 15 minutes
+        };
 
-            const accessTokenOptions = {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Lax',
-                maxAge: 15 * 60 * 1000 // 15 minutes
-            };
+        const refreshTokenOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        };
 
-            const refreshTokenOptions = {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'Lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-            };
-
-            res.status(201)
-                .cookie('accessToken', accessToken, accessTokenOptions)
-                .cookie('refreshToken', refreshToken, refreshTokenOptions)
-                .json({
-                    message: "Registrazione effettuata con successo",
-                    user: { name: name, email: email, id: result.insertId }
-                });
-        } else {
-            return res.status(500).json({ message: "Errore nella registrazione" });
-        }
+        res.status(201)
+            .cookie('accessToken', accessToken, accessTokenOptions)
+            .cookie('refreshToken', refreshToken, refreshTokenOptions)
+            .json({
+                message: "Registrazione effettuata con successo",
+                user: { name: name, email: email, id: newUser.id }
+            });
     } catch (error) {
         console.error("Errore db: ", error);
-        if (error.code === 'ER_DUP_ENTRY') {
+        if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(409).json({ message: "Email già registrata" });
         }
         res.status(500).json({ error: "Errore creazione utente" });
@@ -80,25 +86,26 @@ const refreshToken = async (req, res) => {
     try {
         const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
 
-        // Check if refresh token exists and is valid
-        const [rows] = await db.execute(
-            `SELECT rt.*, u.name, u.surname, u.email
-            FROM refresh_tokens rt
-            JOIN users u ON rt.user_id = u.id
-            WHERE rt.token = ?
-            AND rt.expires_at > NOW()`,
-            [tokenHash]
-        );
+        // Controllo se il refresh token è ancora valido
+        const refreshTokenRecord = await db.RefreshToken.findOne({
+            where: {
+                token: tokenHash
+            },
+            include: {
+                model: db.User,
+                attributes: ['id', 'name', 'surname', 'email']
+            }
+        });
 
-        if (rows.length === 0) {
+        if (!refreshTokenRecord || new Date() > refreshTokenRecord.expiresAt) {
             return res.status(403).json({ message: "Refresh token non valido o scaduto" });
         }
 
-        const user = rows[0];
+        const user = refreshTokenRecord.User;
 
         // Generate new access token
         const newAccessToken = jwt.sign(
-            { id: user.user_id, email: user.email, name: user.name, surname: user.surname },
+            { id: user.id, email: user.email, name: user.name, surname: user.surname },
             process.env.JWT_SECRET,
             { expiresIn: '15m' }
         );
@@ -135,8 +142,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-        const user = rows[0];
+        const user = await db.User.findOne({ where: { email: email } });
 
         if (!user) {
             return res.status(401).json({ message: "Credenziali non valide" });
@@ -159,13 +165,16 @@ const login = async (req, res) => {
         const refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
         // Cancella eventuali vecchi refresh token dell'utente
-        await db.execute('DELETE FROM refresh_tokens WHERE user_id = ?', [user.id]);
+        await db.RefreshToken.destroy({
+            where: { userId: user.id }
+        });
 
         // Salvataggio nuovo refresh token hashato
-        await db.execute(
-            'INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)',
-            [user.id, refreshTokenHash, refreshTokenExpiry]
-        );
+        await db.RefreshToken.create({
+            userId: user.id,
+            token: refreshTokenHash,
+            expiresAt: refreshTokenExpiry
+        });
 
         const accessTokenOptions = {
             httpOnly: true,
@@ -202,11 +211,19 @@ const logout = async (req, res) => {
         // Clean up expired refresh tokens and the current one
         if (refreshToken) {
             const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
-            await db.execute('DELETE FROM refresh_tokens WHERE token = ?', [refreshTokenHash]);
+            await db.RefreshToken.destroy({
+                where: { token: refreshTokenHash }
+            });
         }
 
         // Also clean up all expired tokens in the database
-        await db.execute('DELETE FROM refresh_tokens WHERE expires_at < NOW()');
+        await db.RefreshToken.destroy({
+            where: {
+                expiresAt: {
+                    [Op.lt]: new Date()
+                }
+            }
+        });
 
         // Clear cookies
         res.clearCookie('accessToken', {
