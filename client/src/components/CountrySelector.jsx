@@ -22,7 +22,6 @@ const CountrySelect = ({ value, onChange }) => {
 
     return (
         <div>
-            <label>Nazione</label>
             <Select
                 options={options}
                 isLoading={isLoading}

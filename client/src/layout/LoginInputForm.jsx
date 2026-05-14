@@ -59,26 +59,26 @@ function LoginInputForm() {
     return (
         <>
             <Container className="ExternalContainer">
-                I'm the external container
                 <Row className='justify-content-center'>
-                    <Col xs={11} sm={8} md={6} lg={6} xl={7} className='mx-auto'>
+                    <Col xs={12} sm={12} md={10} lg={8} xl={7}>
                         <div className='mx-auto InputWindow'>
-                            <div className='mb-3 InputContent'>
-                                <h2 className="login-title">Effettua il login</h2>
+                            <div className='mb-3 py-5 InputContent'>
                                 <Form onSubmit={handleSubmit}>
-                                    <InputGroup className="mb-3 input-field-group">
-                                        <InputGroup.Text id="user-icon">
-                                            <PersonFill size={20} />
-                                        </InputGroup.Text>
-                                        <Form.Control
-                                            placeholder="Email"
-                                            name="email"
-                                            value={loginData.email}
-                                            onChange={handleChange}
-                                            aria-label="Email"
-                                            aria-describedby="user-icon"
-                                        />
-                                    </InputGroup>
+                                        <InputGroup className="mb-3 input-field-group">
+                                            <InputGroup.Text id="user-icon">
+                                                <PersonFill size={23} />
+                                            </InputGroup.Text>
+
+                                            <Form.Control
+                                                placeholder="Email"
+                                                name="email"
+                                                value={loginData.email}
+                                                onChange={handleChange}
+                                                aria-label="Email"
+                                                aria-describedby="user-icon"
+                                                size='lg'
+                                            />
+                                        </InputGroup>
                                     <PasswordInputComponent
                                         value={loginData.password}
                                         onChange={handleChange}

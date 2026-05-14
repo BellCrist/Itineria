@@ -7,7 +7,7 @@ function LoginPage() {
         <>
             <LoginNavBar />
             <div className="container-fluid login-text">
-                <h2>Login</h2>
+                <h2>LOGIN</h2>
             </div>
             <LoginInputForm />
         </>

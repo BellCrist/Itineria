@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import CountrySelect from '../components/CountrySelector';
 import PasswordInputComponent from '../components/PasswordInput';
 import { AuthContext } from '../context/AuthContext';
@@ -12,7 +12,9 @@ import '../css/RegistrationForm.css';
 
 function RegistrationForm() {
     const navigate = useNavigate();
-    const {login} = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
+    const [validated, setValidated] = useState(false);
+
     const [formData, setFormData] = useState({
         name: '',
         surname: '',
@@ -35,6 +37,22 @@ function RegistrationForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (formData.country === '') {
+            e.stopPropagation();
+            alert("Selezionare una nazione");
+            return;
+        }
+
+        //Check sulla validità dei vari input
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.stopPropagation();
+            setValidated(true);
+            return;
+        }
+
+        setValidated(true);
 
         try {
             const response = await fetch('http://localhost:8080/api/auth/register', {
@@ -62,97 +80,116 @@ function RegistrationForm() {
     }
 
     return (
-        <Container className="Form-container">
-            <div className='mx-auto registrationForm'>
-                <Form onSubmit={handleSubmit}>
-                    <Row className="mb-3">
-                        <Col xs={5}>
-                            <Form.Label>Nome</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='name'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                        <Col xs={5}>
-                            <Form.Label>Cognome</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='surname'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                    </Row>
+        <Container className="ExternalContainer">
+            <div className='mx-auto InputWindow'>
+                <div className='mb-3 py-5 InputContent'>
+                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} xs={5} controlId="validName">
+                                <Form.Label>Nome</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='name'
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={5} controlId="validSurname">
+                                <Form.Label>Cognome</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='surname'
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                        </Row>
 
-                    <Row className="mb-3 align-items-end">
-                        <Col xs={5}>
-                            <CountrySelect
-                                value={formData.country}
-                                onChange={handleChange}
-                                name='country'
-                            />
-                        </Col>
-                        <Col xs={5}>
-                            <Form.Label>Città</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='city'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                    </Row>
+                        <Row className="mb-3 align-items-end">
+                            <Form.Group as={Col} xs={5} controlId="validCountry">
+                                <Form.Label>Nazione</Form.Label>
+                                <CountrySelect
+                                    value={formData.country}
+                                    onChange={handleChange}
+                                    name='country'
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={5} controlId="validCity">
+                                <Form.Label>Città</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='city'
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                        </Row>
 
-                    <Row className="mb-3">
-                        <Col xs={5}>
-                            <Form.Label>Indirizzo</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='address'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                        <Col xs={3}>
-                            <Form.Label>Provincia</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='province'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                        <Col xs={3}>
-                            <Form.Label>CAP</Form.Label>
-                            <Form.Control
-                                type='text'
-                                name='zipCode'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                    </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} xs={5} controlId="validAddress">
+                                <Form.Label>Indirizzo</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='address'
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={5} controlId="validProvince">
+                                <Form.Label>Provincia</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='province'
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} xs={5} controlId="validCap">
+                                <Form.Label>CAP</Form.Label>
+                                <Form.Control
+                                    type='text'
+                                    name='zipCode'
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                        </Row>
 
-                    <Row className="mb-3">
-                        <Col xs={6}>
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type='email'
-                                name='email'
-                                onChange={handleChange}
-                            />
-                        </Col>
-                    </Row>
-                    <Row className='mb-3'>
-                        <Col xs={6}>
-                            <Form.Label>Password</Form.Label>
-                            <PasswordInputComponent
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                        </Col>
-                    </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} xs={6} controlId="validEmail">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type='email'
+                                    name='email'
+                                    onChange={handleChange}
+                                    required
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Inserire un indirizzo mail valido
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Row>
+                        <Row className='mb-3'>
+                            <Form.Group as={Col} xs={6} controlId="validPassword">
+                                <Form.Label>Password</Form.Label>
+                                <PasswordInputComponent
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required={true}
+                                />
+                            </Form.Group>
+                        </Row>
 
-                    <Button variant="primary" type="submit">
-                        Iscriviti
-                    </Button>
-                </Form>
+                        <Button variant="primary" type="submit">
+                            Iscriviti
+                        </Button>
+                    </Form>
+                </div>
+                <div className='subscriptionLink'>
+                    <p className='m-0'>Hai già un account?{" "}
+                        <NavLink to="/login" className="linkSubscription">Accedi</NavLink>
+                    </p>
+                </div>
             </div>
         </Container>
     )

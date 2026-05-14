@@ -8,6 +8,14 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+
+        //Se non c'è nulla nei cookies evito chiamate al server
+        const hasSession = Cookies.get('user_session');
+        if (!hasSession) {
+            setLoading(false);
+            return;
+        }
+
         /**
          * Se l'access token è scaduto, chiamo il refresh.
          */
@@ -17,7 +25,11 @@ export const AuthProvider = ({ children }) => {
                     method: 'POST',
                     credentials: 'include'
                 });
-                return response.ok;
+
+                if (response.ok)
+                    return true;
+                else
+                    return false;
             } catch (error) {
                 console.error('Errore refresh token:', error);
                 return false;
@@ -36,6 +48,8 @@ export const AuthProvider = ({ children }) => {
                 });
 
                 if (response.status === 401 || response.status === 403) {
+                    // const xx = await response.json()
+                    // console.log(xx.message);
                     const refreshed = await refreshAccessToken();
                     if (refreshed) {
                         response = await fetch('http://localhost:8080/api/auth/me', {

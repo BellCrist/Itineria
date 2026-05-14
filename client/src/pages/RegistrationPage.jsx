@@ -7,7 +7,7 @@ function RegistrationPage() {
         {/**Da sostituire la navbar */}
             <LoginNavBar />
             <div className="container-fluid registration-text">
-                <h2>Registration</h2>
+                <h2>REGISTRATI</h2>
             </div>
             <RegistrationForm />
         </>
