@@ -8,7 +8,7 @@ function LoginNavBar() {
     return (
         <Navbar className="navigation-bar">
             {/* Il container Bootstrap per mantenere il contenuto allineato al centro della pagina */}
-            <div className="container d-flex justify-content-between align-items-center py-2">
+            <div className="container d-flex justify-content-between align-items-center">
 
                 <Navbar.Brand href="/" className='m-0'>
                     <img

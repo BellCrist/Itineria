@@ -14,6 +14,7 @@ function RegistrationForm() {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
     const [validated, setValidated] = useState(false);
+    const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -37,12 +38,13 @@ function RegistrationForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setAttemptedSubmit(true);
 
-        if (formData.country === '') {
+/*         if (formData.country === '') {
             e.stopPropagation();
             alert("Selezionare una nazione");
             return;
-        }
+        } */
 
         //Check sulla validità dei vari input
         const form = e.currentTarget;
@@ -85,7 +87,7 @@ function RegistrationForm() {
                 <div className='mb-3 py-5 InputContent'>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Row className="mb-3">
-                            <Form.Group as={Col} xs={5} controlId="validName">
+                            <Form.Group as={Col} xs={6} controlId="validName">
                                 <Form.Label>Nome</Form.Label>
                                 <Form.Control
                                     type='text'
@@ -94,7 +96,7 @@ function RegistrationForm() {
                                     required
                                 />
                             </Form.Group>
-                            <Form.Group as={Col} xs={5} controlId="validSurname">
+                            <Form.Group as={Col} xs={6} controlId="validSurname">
                                 <Form.Label>Cognome</Form.Label>
                                 <Form.Control
                                     type='text'
@@ -106,15 +108,16 @@ function RegistrationForm() {
                         </Row>
 
                         <Row className="mb-3 align-items-end">
-                            <Form.Group as={Col} xs={5} controlId="validCountry">
+                            <Form.Group as={Col} xs={6} controlId="validCountry">
                                 <Form.Label>Nazione</Form.Label>
                                 <CountrySelect
                                     value={formData.country}
                                     onChange={handleChange}
                                     name='country'
+                                    showError={attemptedSubmit}
                                 />
                             </Form.Group>
-                            <Form.Group as={Col} xs={5} controlId="validCity">
+                            <Form.Group as={Col} xs={6} controlId="validCity">
                                 <Form.Label>Città</Form.Label>
                                 <Form.Control
                                     type='text'
@@ -126,7 +129,7 @@ function RegistrationForm() {
                         </Row>
 
                         <Row className="mb-3">
-                            <Form.Group as={Col} xs={5} controlId="validAddress">
+                            <Form.Group as={Col} xs={6} controlId="validAddress">
                                 <Form.Label>Indirizzo</Form.Label>
                                 <Form.Control
                                     type='text'
@@ -135,7 +138,7 @@ function RegistrationForm() {
                                     required
                                 />
                             </Form.Group>
-                            <Form.Group as={Col} xs={5} controlId="validProvince">
+                            <Form.Group as={Col} xs={6} controlId="validProvince">
                                 <Form.Label>Provincia</Form.Label>
                                 <Form.Control
                                     type='text'
@@ -144,7 +147,7 @@ function RegistrationForm() {
                                     required
                                 />
                             </Form.Group>
-                            <Form.Group as={Col} xs={5} controlId="validCap">
+                            <Form.Group as={Col} xs={6} controlId="validCap">
                                 <Form.Label>CAP</Form.Label>
                                 <Form.Control
                                     type='text'
@@ -156,7 +159,7 @@ function RegistrationForm() {
                         </Row>
 
                         <Row className="mb-3">
-                            <Form.Group as={Col} xs={6} controlId="validEmail">
+                            <Form.Group as={Col} xs={7} controlId="validEmail">
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control
                                     type='email'
@@ -170,12 +173,13 @@ function RegistrationForm() {
                             </Form.Group>
                         </Row>
                         <Row className='mb-3'>
-                            <Form.Group as={Col} xs={6} controlId="validPassword">
+                            <Form.Group as={Col} xs={7} controlId="validPassword">
                                 <Form.Label>Password</Form.Label>
                                 <PasswordInputComponent
                                     value={formData.password}
                                     onChange={handleChange}
                                     required={true}
+                                    showError={attemptedSubmit}
                                 />
                             </Form.Group>
                         </Row>

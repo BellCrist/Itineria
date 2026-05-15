@@ -1,0 +1,18 @@
+/* Country Select - Default state */
+.country-select-wrapper {
+    transition: border-color 0.15s ease-in-out;
+}
+
+/* Country Select - Error state */
+.country-select-wrapper.country-select-error .react-select__control {
+    border: 2px solid #dc3545 !important;
+    border-radius: 0.375rem;
+}
+
+.country-select-wrapper.country-select-error .react-select__input-container {
+    color: #dc3545 !important;
+}
+
+.country-select-wrapper.country-select-error .react-select__placeholder {
+    color: #dc3545 !important;
+}

@@ -1,10 +1,29 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
+import '../css/CountrySelector.css';
 
-const CountrySelect = ({ value, onChange }) => {
+const CountrySelect = ({ value, onChange, showError = false }) => {
     const [options, setOptions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const isEmpty = value === '' || value === null;
+    const shouldShowError = showError && isEmpty;
 
+    const customStyles = {
+        control: (baseStyles, state) => ({
+            ...baseStyles,
+            borderColor: shouldShowError ? '#dc3545' : baseStyles.borderColor,
+            borderWidth: shouldShowError ? '2px' : baseStyles.borderWidth,
+            
+        })/* ,
+        placeholder: (baseStyles) => ({
+            ...baseStyles,
+            color: shouldShowError ? '#dc3545' : baseStyles.color,
+        }),
+        input: (baseStyles) => ({
+            ...baseStyles,
+            color: shouldShowError ? '#dc3545' : baseStyles.color,
+        }) */
+    };
     useEffect(() => {
         fetch("https://restcountries.com/v3.1/all?fields=name,cca2")
             .then((res) => res.json())
@@ -21,7 +40,7 @@ const CountrySelect = ({ value, onChange }) => {
     }, []);
 
     return (
-        <div>
+        <div className={`country-select-wrapper ${shouldShowError ? 'country-select-error' : ''}`}>
             <Select
                 options={options}
                 isLoading={isLoading}
@@ -37,6 +56,7 @@ const CountrySelect = ({ value, onChange }) => {
                         }
                     });
                 }}
+                styles={customStyles}
             />
         </div>
     );

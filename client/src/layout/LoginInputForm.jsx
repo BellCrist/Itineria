@@ -18,6 +18,7 @@ function LoginInputForm() {
         email: '',
         password: '',
     });
+    const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
     const handleChange = (e) => {
         setLoginData({
@@ -30,6 +31,11 @@ function LoginInputForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setAttemptedSubmit(true);
+
+        if (isInvalidLogin) {
+            return;
+        }
 
         try {
             const response = await fetch('http://localhost:8080/api/auth/login', {
@@ -82,6 +88,7 @@ function LoginInputForm() {
                                     <PasswordInputComponent
                                         value={loginData.password}
                                         onChange={handleChange}
+                                        showError={attemptedSubmit}
                                     />
                                     <Button type="submit"
                                         disabled={isInvalidLogin}

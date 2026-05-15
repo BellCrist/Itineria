@@ -4,12 +4,12 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import '../css/PasswordInput.css';
 
-function PasswordInputComponent({ value, onChange }) {
+function PasswordInputComponent({ value, onChange, showError = false }) {
     const [showPassword, setShowPassword] = useState(false);
     const isEmpty = value.trim() === '';
 
     return (
-        <InputGroup className={`mb-3 password-input-field ${isEmpty ? 'password-empty' : ''}`}>
+        <InputGroup className={`mb-3 password-input-field ${(showError && isEmpty) ? 'password-empty' : ''}`}>
             <InputGroup.Text id="key-icon">
                 <KeyFill size={23} />
             </InputGroup.Text>
