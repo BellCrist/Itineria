@@ -18,6 +18,8 @@ function LoginInputForm() {
         email: '',
         password: '',
     });
+
+    //Per la colorazione rossa del campo della password in caso di campo vuoto
     const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
     const handleChange = (e) => {
@@ -82,13 +84,12 @@ function LoginInputForm() {
                                                 onChange={handleChange}
                                                 aria-label="Email"
                                                 aria-describedby="user-icon"
-                                                size='lg'
+                                                size='md'
                                             />
                                         </InputGroup>
                                     <PasswordInputComponent
                                         value={loginData.password}
                                         onChange={handleChange}
-                                        showError={attemptedSubmit}
                                     />
                                     <Button type="submit"
                                         disabled={isInvalidLogin}

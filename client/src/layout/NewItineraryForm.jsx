@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import '../css/NewItineraryForm.css';
 
 function NewItineraryForm() {
 
     const navigate = useNavigate();
+    const [validated, setValidated] = useState(false);
     const [tripName, setTripName] = useState('');
     const [tripDescription, setTripDescription] = useState('');
     const [waypoints, setWaypoints] = useState([
@@ -34,6 +36,16 @@ function NewItineraryForm() {
     // 5. Gestione del submit finale
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        //Controlli sulla validità dei vari campi del form
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+            e.stopPropagation();
+            setValidated(true);
+            return;
+        }
+        setValidated(true);
+
         const itineraryData = {
             tripName,
             tripDescription,
@@ -65,24 +77,27 @@ function NewItineraryForm() {
     };
 
     return (
-        <Container className="Form-container">
-            <h2>Crea il tuo Itinerario</h2>
-            <div className='mx-auto'>
-                <Form onSubmit={handleSubmit}>
-                    <Row>
-                        <Form.Label>Nome del Viaggio</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Es. Tour dell'Andalusia"
-                            value={tripName}
-                            onChange={(e) => setTripName(e.target.value)}
-                            required
-                        />
+        <Container className="itinerary-form-container">
+            <div className='mx-auto py-3 px-3 mx-auto'>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <Row className='mb-3'>
+                        <Form.Group as={Col} xs={6} controlId="validName">
+                            <Form.Label><strong>Nome itinerario</strong></Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={tripName}
+                                onChange={(e) => setTripName(e.target.value)}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Nome itinerario obbligatorio
+                            </Form.Control.Feedback>
+                        </Form.Group>
                     </Row>
 
                     <Row className="mb-3">
-                        <Col xs={5}>
-                            <Form.Label>Descrizione Itinerario</Form.Label>
+                        <Col xs={7}>
+                            <Form.Label><strong>Descrizione itinerario</strong></Form.Label>
                             <Form.Control
                                 as='textarea'
                                 name='surname'
@@ -92,7 +107,7 @@ function NewItineraryForm() {
                         </Col>
                     </Row>
                     <hr />
-                    <h4>Tappe del Viaggio (Waypoints)</h4>
+                    <h4>Tappe del Viaggio</h4>
 
                     {waypoints.map((waypoint, index) => (
                         <Card className="mb-3" key={index}>
@@ -115,7 +130,6 @@ function NewItineraryForm() {
                                                 placeholder="Città, Hotel, Attrazione..."
                                                 value={waypoint.destination}
                                                 onChange={(e) => handleWaypointChange(index, 'destination', e.target.value)}
-                                                required
                                             />
                                         </Form.Group>
                                     </Col>
@@ -126,7 +140,6 @@ function NewItineraryForm() {
                                                 type="date"
                                                 value={waypoint.date}
                                                 onChange={(e) => handleWaypointChange(index, 'date', e.target.value)}
-                                                required
                                             />
                                         </Form.Group>
                                     </Col>
@@ -157,7 +170,7 @@ function NewItineraryForm() {
                         </Card>
                     ))}
 
-                    <Button variant="secondary" onClick={addWaypoint} className="mb-4">
+                    <Button variant="success" onClick={addWaypoint} className="mb-4">
                         + Aggiungi un'altra tappa
                     </Button>
 
@@ -170,9 +183,16 @@ function NewItineraryForm() {
                         />
                     </div>
 
-                    <div className="d-grid gap-2">
-                        <Button variant="primary" type="submit" size="lg">
+                    <div className="d-flex justify-content-end">
+                        <Button variant="primary" type="submit" size="lg" className='mx-2'>
                             Salva Itinerario
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => navigate('/personal-itinerary')}
+                            className='mx-2'
+                        >
+                            Annulla
                         </Button>
                     </div>
                 </Form>

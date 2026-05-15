@@ -1,3 +1,8 @@
+.ExternalContainer{
+    margin-bottom: 30px;
+    margin-top: 0 !important;
+}
+
 /* Contenitore più esterno */
 .InputWindow {
     border-radius: 30px;
@@ -10,7 +15,7 @@
 
 /* Form che si sovrappone al link di login */
 .InputContent {
-    padding: 30px 40px;
+    padding: 10px 40px;
     border-bottom-left-radius: 40px;
     border-bottom-right-radius: 40px;
     background-color: white;

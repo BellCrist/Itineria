@@ -414,13 +414,20 @@ function ItineraryDetails({ id }) {
                             + Aggiungi un'altra tappa
                         </Button>
 
-                        <div className="d-flex justify-content-between">
-                            <Button variant="primary" type="submit" size="md" disabled={!hasChanges}>
+                        <div className="d-flex justify-content-end">
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                size="md"
+                                disabled={!hasChanges}
+                                className='mx-2'
+                            >
                                 Salva modifiche
                             </Button>
                             <Button
                                 variant="secondary"
                                 onClick={() => navigate('/personal-itinerary')}
+                                className='mx-2'
                             >
                                 Annulla
                             </Button>

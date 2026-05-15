@@ -40,12 +40,6 @@ function RegistrationForm() {
         e.preventDefault();
         setAttemptedSubmit(true);
 
-/*         if (formData.country === '') {
-            e.stopPropagation();
-            alert("Selezionare una nazione");
-            return;
-        } */
-
         //Check sulla validità dei vari input
         const form = e.currentTarget;
         if (form.checkValidity() === false) {

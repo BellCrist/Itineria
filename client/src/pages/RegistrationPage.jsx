@@ -1,3 +1,4 @@
+import Footer from "../layout/Footer";
 import LoginNavBar from "../layout/LoginNavBar";
 import RegistrationForm from '../layout/RegistrationForm';
 
@@ -10,6 +11,7 @@ function RegistrationPage() {
                 <h2>REGISTRATI</h2>
             </div>
             <RegistrationForm />
+            <Footer/>
         </>
 
     )

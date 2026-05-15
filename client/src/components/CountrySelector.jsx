@@ -13,17 +13,9 @@ const CountrySelect = ({ value, onChange, showError = false }) => {
             ...baseStyles,
             borderColor: shouldShowError ? '#dc3545' : baseStyles.borderColor,
             borderWidth: shouldShowError ? '2px' : baseStyles.borderWidth,
-            
-        })/* ,
-        placeholder: (baseStyles) => ({
-            ...baseStyles,
-            color: shouldShowError ? '#dc3545' : baseStyles.color,
-        }),
-        input: (baseStyles) => ({
-            ...baseStyles,
-            color: shouldShowError ? '#dc3545' : baseStyles.color,
-        }) */
+        })
     };
+    
     useEffect(() => {
         fetch("https://restcountries.com/v3.1/all?fields=name,cca2")
             .then((res) => res.json())
