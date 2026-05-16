@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import CancelChanges from '../components/CancelChanges';
+import SaveChangesButton from '../components/SaveChangesButton';
 import '../css/NewItineraryForm.css';
 
 function NewItineraryForm() {
@@ -175,25 +177,27 @@ function NewItineraryForm() {
                     </Button>
 
                     <div className='mb-3'>
-                        <Form.Check
-                            type="checkbox"
-                            label="Itinerario privato"
-                            checked={privateItinerary}
-                            onChange={(e) => setPrivateItinerary(e.target.checked)}
-                        />
+                        <OverlayTrigger
+                            key={'private-itinerary'}
+                            placement='bottom'
+                            overlay={
+                                <Tooltip>
+                                    Rende il tuo itinerario privato, non visibile agli altri utenti
+                                </Tooltip>
+                            }
+                        >
+                            <Form.Check
+                                type="checkbox"
+                                label="Itinerario privato"
+                                checked={privateItinerary}
+                                onChange={(e) => setPrivateItinerary(e.target.checked)}
+                            />
+                        </OverlayTrigger>
                     </div>
 
                     <div className="d-flex justify-content-end">
-                        <Button variant="primary" type="submit" size="lg" className='mx-2'>
-                            Salva Itinerario
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            onClick={() => navigate('/personal-itinerary')}
-                            className='mx-2'
-                        >
-                            Annulla
-                        </Button>
+                        <SaveChangesButton hasChanges={true} />
+                        <CancelChanges />
                     </div>
                 </Form>
             </div>

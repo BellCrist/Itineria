@@ -7,7 +7,7 @@ const Footer = () => {
         <footer className="footer-container">
             <p className="footer-text">
                 © {currentYear}
-                <span className="brand-name"> ITINERIA</span>.
+                <span className="brand-name"> TRAVEL DIARY</span>.
                 Tutti i diritti riservati.
             </p>
         </footer>

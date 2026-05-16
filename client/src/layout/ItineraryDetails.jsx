@@ -2,6 +2,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
+import CancelChanges from '../components/CancelChanges';
+import SaveChangesButton from '../components/SaveChangesButton';
+
 
 function ItineraryDetails({ id }) {
 
@@ -158,7 +161,7 @@ function ItineraryDetails({ id }) {
         e.preventDefault();
 
         try {
-            const updateData = {
+            const updatedData = {
                 tripName: itineraryDetails.title,
                 tripDescription: itineraryDetails.description,
                 waypoints: itineraryDetails.waypoints,
@@ -171,11 +174,12 @@ function ItineraryDetails({ id }) {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(updateData)
+                body: JSON.stringify(updatedData)
             });
 
             if (response.ok) {
                 const result = await response.json();
+                setOriginalDetails(itineraryDetails);   //Dopo la modifica reimposto anche l'oggetto originalDetails per allinearlo con i dati aggiornati
                 alert('Itinerario aggiornato con successo!');
             } else {
                 const error = await response.json();
@@ -415,22 +419,8 @@ function ItineraryDetails({ id }) {
                         </Button>
 
                         <div className="d-flex justify-content-end">
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                size="md"
-                                disabled={!hasChanges}
-                                className='mx-2'
-                            >
-                                Salva modifiche
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={() => navigate('/personal-itinerary')}
-                                className='mx-2'
-                            >
-                                Annulla
-                            </Button>
+                            <SaveChangesButton hasChanges={hasChanges} />
+                            <CancelChanges />
                         </div>
                     </Form>
                 </div>

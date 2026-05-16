@@ -11,7 +11,7 @@ const CountrySelect = ({ value, onChange, showError = false }) => {
     const customStyles = {
         control: (baseStyles, state) => ({
             ...baseStyles,
-            borderColor: shouldShowError ? '#dc3545' : baseStyles.borderColor,
+            borderColor: shouldShowError ? '#f2b2b8' : baseStyles.borderColor,
             borderWidth: shouldShowError ? '2px' : baseStyles.borderWidth,
         })
     };
