@@ -1,3 +1,4 @@
+import '../css/RegistrationPage.css';
 import Footer from "../layout/Footer";
 import LoginNavBar from "../layout/LoginNavBar";
 import RegistrationForm from '../layout/RegistrationForm';
@@ -5,15 +6,17 @@ import RegistrationForm from '../layout/RegistrationForm';
 function RegistrationPage() {
     return (
         <>
-        {/**Da sostituire la navbar */}
-            <LoginNavBar />
-            <div className="container-fluid registration-text">
-                <h2>REGISTRATI</h2>
+            <div className="page-container">
+                <div className="content-wrap">
+                    <LoginNavBar />
+                    <div className="container-fluid registration-text">
+                        <h2>REGISTRATI</h2>
+                    </div>
+                    <RegistrationForm />
+                </div>
             </div>
-            <RegistrationForm />
-            <Footer/>
+            <Footer />
         </>
-
     )
 }
 
