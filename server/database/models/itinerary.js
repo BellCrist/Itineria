@@ -21,7 +21,7 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     waypoints: DataTypes.JSON,
     details: DataTypes.JSON,
-    shareable: DataTypes.BOOLEAN
+    privateItinerary: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Itinerary',

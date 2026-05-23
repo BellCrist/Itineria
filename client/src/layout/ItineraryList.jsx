@@ -10,7 +10,7 @@ function Itinerarylist() {
     useEffect(() => {
         const getUserItinerary = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/itineraries/my-itineraries', {
+                const response = await fetch('/api/itineraries/my-itineraries', {
                     method: 'GET',
                     credentials: 'include'
                 });

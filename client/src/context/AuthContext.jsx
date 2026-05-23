@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
          */
         const refreshAccessToken = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/auth/refresh', {
+                const response = await fetch('/api/auth/refresh', {
                     method: 'POST',
                     credentials: 'include'
                 });
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
          */
         const fetchCurrentUser = async () => {
             try {
-                let response = await fetch('http://localhost:8080/api/auth/me', {
+                let response = await fetch('/api/auth/me', {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
                     // console.log(xx.message);
                     const refreshed = await refreshAccessToken();
                     if (refreshed) {
-                        response = await fetch('http://localhost:8080/api/auth/me', {
+                        response = await fetch('/api/auth/me', {
                             method: 'GET',
                             credentials: 'include'
                         });

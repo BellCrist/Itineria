@@ -56,7 +56,7 @@ function NewItineraryForm() {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/itineraries/new-itinerary', {
+            const response = await fetch('/api/itineraries/new-itinerary', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

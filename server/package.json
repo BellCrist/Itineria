@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "start:prod": "npm run db:migrate && node server.js"
   },
   "keywords": [],
   "author": "",

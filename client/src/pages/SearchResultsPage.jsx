@@ -25,7 +25,7 @@ function SearchResultsPage() {
             setError(null);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/itineraries/search?destination=${encodeURIComponent(destination)}`);
+                const response = await fetch(`/api/itineraries/search?destination=${encodeURIComponent(destination)}`);
 
                 if (!response.ok) {
                     throw new Error('Errore durante la ricerca');

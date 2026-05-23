@@ -71,7 +71,7 @@ const createItinerary = async (req, res) => {
             title: tripName,
             description: tripDescription,
             waypoints: waypoints,
-            shareable: privateItinerary
+            privateItinerary: privateItinerary
         });
 
         if (newItinerary.id) {
@@ -109,7 +109,7 @@ const updateItinerary = async (req, res) => {
     if (tripName !== undefined) updateData.title = tripName;
     if (tripDescription !== undefined) updateData.description = tripDescription;
     if (waypoints !== undefined) updateData.waypoints = waypoints;
-    if (privateItinerary !== undefined) updateData.shareable = privateItinerary;
+    if (privateItinerary !== undefined) updateData.privateItinerary = privateItinerary;
 
     if (Object.keys(updateData).length === 0) {
         return res.status(400).json({
@@ -207,7 +207,7 @@ const searchItineraries = async (req, res) => {
         // Usiamo db.Itinerary (assicurati che il nome del modello sia corretto)
         const itineraries = await db.Itinerary.findAll({
             where: {
-                shareable: 1,
+                privateItinerary: 1,
 
                 // Sequelize.where esegue la funzione MySQL JSON_SEARCH in modo sicuro
                 [Op.and]: db.sequelize.where(

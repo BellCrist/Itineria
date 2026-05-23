@@ -20,9 +20,9 @@ const envMap = {
 };
 const normalizedEnv = envMap[env] || 'development';
 
-// Importiamo il JSON (usa il percorso corretto verso il tuo config)
-import configJson from '../config/config.json' with { type: 'json' };
-const config = configJson[normalizedEnv];
+// Importiamo la configurazione dinamica che legge le variabili d'ambiente
+import configData from '../config/config.js';
+const config = configData[normalizedEnv];
 
 if (!config) {
   throw new Error(`Configuration not found for environment: ${env} (normalized to: ${normalizedEnv})`);

@@ -23,7 +23,7 @@ function UserDataManager() {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:8080/api/user-profile/save-data', {
+            const response = await fetch('/api/user-profile/save-data', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function UserDataManager() {
 
         const getUserData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/user-profile/informations', {
+                const response = await fetch('/api/user-profile/informations', {
                     method: 'GET',
                     credentials: 'include'
                 });

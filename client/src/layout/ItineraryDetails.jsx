@@ -14,7 +14,7 @@ function ItineraryDetails({ id }) {
         description: '',
         waypoints: [],
         details: '',
-        shareable: ''
+        privateItinerary: ''
     });
 
     const [originalDetails, setOriginalDetails] = useState({
@@ -22,7 +22,7 @@ function ItineraryDetails({ id }) {
         description: '',
         waypoints: [],
         details: '',
-        shareable: ''
+        privateItinerary: ''
     });
 
     const [editingField, setEditingField] = useState(null);
@@ -36,7 +36,7 @@ function ItineraryDetails({ id }) {
             setError(null);
 
             try {
-                const response = await fetch(`http://localhost:8080/api/itineraries/${id}`, {
+                const response = await fetch(`/api/itineraries/${id}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -142,7 +142,7 @@ function ItineraryDetails({ id }) {
 
         if (isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:8080/api/itineraries/${id}`, {
+                const response = await fetch(`/api/itineraries/${id}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
@@ -165,10 +165,10 @@ function ItineraryDetails({ id }) {
                 tripName: itineraryDetails.title,
                 tripDescription: itineraryDetails.description,
                 waypoints: itineraryDetails.waypoints,
-                privateItinerary: itineraryDetails.shareable
+                privateItinerary: itineraryDetails.privateItinerary
             };
 
-            const response = await fetch(`http://localhost:8080/api/itineraries/${id}`, {
+            const response = await fetch(`/api/itineraries/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -358,7 +358,7 @@ function ItineraryDetails({ id }) {
                                                                     <Form.Label>Note</Form.Label>
                                                                     <Form.Control
                                                                         type='text'
-                                                                        value={waypoint.details || ''}
+                                                                        value={waypoint.notes || ''}
                                                                         className='me-2'
                                                                         onChange={(e) => handleWaypointChange(index, 'details', e.target.value)}
                                                                     />
