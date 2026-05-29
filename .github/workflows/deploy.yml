@@ -1,0 +1,60 @@
+name: Deploy to AWS EC2
+
+# La pipeline si attiva da sola ogni volta che fai un push sul branch "main"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHub scarica l'ultima versione del tuo codice sul suo server virtuale
+      - name: Checkout del codice
+        uses: actions/checkout@v3
+
+      # 2. Configura le credenziali per poter parlare con AWS
+      - name: Configura AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 3. Effettua il login sul registro Docker di AWS (ECR)
+      - name: Login su Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # 4. Compila il Dockerfile del tuo progetto e spinge l'immagine su ECR
+      - name: Build e Push dell'immagine su ECR
+        env:
+          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          ECR_REPOSITORY: travel-diary
+          IMAGE_TAG: latest
+        run: |
+          docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # 5. Si collega via SSH alla EC2 e aggiorna il container in esecuzione
+      - name: Connessione SSH ed Esecuzione Deploy su EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+
+            docker pull ${{ secrets.ECR_REGISTRY }}/travel-diary:latest
+
+            docker stop itinerary-app || true
+            docker rm itinerary-app || true
+
+            docker run -d \
+              --name itinerary-app \
+              -p 80:8080 \
+              --env-file ./.env.production \
+              ${{ secrets.ECR_REGISTRY }}/travel-diary:latest

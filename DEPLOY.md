@@ -16,7 +16,7 @@
    - **AMI**: Ubuntu Server 24.04 LTS (Free Tier eligible)
    - **Instance type**: t3.small o t3.medium (consigliato)
    - **Storage**: 20-30 GB (SSD)
-   - **Security Group**: 
+   - **Security Group**:
      - SSH (22): da tuo IP
      - HTTP (80): da 0.0.0.0/0
      - HTTPS (443): da 0.0.0.0/0

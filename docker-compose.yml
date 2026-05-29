@@ -13,5 +13,25 @@ services:
     volumes:
       - db_data:/var/lib/mysql
 
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server-container
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: development
+      PORT: 8080
+      DB_HOST: db-itineria
+      DB_PORT: 3306
+      DB_NAME: itineria_db
+      DB_USER: admin-user-itineria
+      DB_PASSWORD: llha23_gg#9Fa
+      JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
+    depends_on:
+      - db-itineria
+
 volumes:
   db_data:
