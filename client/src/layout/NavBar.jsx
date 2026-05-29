@@ -70,8 +70,7 @@ function MainNavBar() {
                             )
                                 :
                                 (<div className="d-none d-sm-inline-flex gap-2">
-                                    <AccessButton label="Accedi" onClick={handleLogin} />
-                                    <AccessButton label="Registrati" onClick={handleRegistration} />
+                                    <AccessButton onClick={handleLogin} />
                                 </div>
                                 )}
                         </div>

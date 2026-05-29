@@ -1,10 +1,13 @@
-import Button from 'react-bootstrap/Button';
+import { Person } from "react-bootstrap-icons";
 
-function AccessButton({ label, onClick }) {
+function AccessButton({ onClick }) {
     return (
-        <Button variant="outline-primary" onClick={onClick}>
-            {label}
-        </Button>
+        <Person
+            style={{ cursor: 'pointer' }}
+            size={42}
+            className='mx-4'
+            onClick={onClick}
+        />
     )
 }
 
