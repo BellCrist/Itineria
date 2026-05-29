@@ -8,11 +8,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      strategies: 'injectManifest',
+      strategies: 'generateSW',
       workbox: {
         cleanupOutdatedCaches: true,
-      },
-      workbox: {
         // Estende il raggio d'azione della cache anche a richieste esterne o API
         runtimeCaching: [
           {
