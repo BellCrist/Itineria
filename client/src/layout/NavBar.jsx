@@ -30,10 +30,10 @@ function MainNavBar() {
             <Navbar expand={expand} className="bg-body-tertiary navigation-bar">
                 <Container fluid>
 
-                    <div className="row w-100 align-items-center m-0">
+                    <div className="row w-100 align-items-center m-0 py-2 px-1 px-lg-3">
 
                         {/* 1. COLONNA SINISTRA: Hamburger (Mobile) / Logo (Desktop) */}
-                        <div className="col-3 d-flex align-items-center justify-content-start p-0">
+                        <div className="col-4 col-lg-3 d-flex align-items-center justify-content-start p-0">
                             {/* Toggle visibile solo su mobile */}
                             <div className='d-lg-none'>
                                 <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
@@ -53,7 +53,7 @@ function MainNavBar() {
 
 
                         {/* 2. COLONNA CENTRALE: Logo (Mobile) / SearchBar + NavLinks (Desktop) */}
-                        <div className="col-6 d-flex flex-column align-items-center justify-content-center p-0">
+                        <div className="col-4 col-lg-6 d-flex flex-column align-items-center justify-content-center p-0">
 
                             {/* Logo mobile al centro */}
                             <Navbar.Brand href="#" className="d-lg-none m-0">
@@ -82,7 +82,7 @@ function MainNavBar() {
 
 
                         {/* 3. COLONNA DESTRA: Lente + Utente (Mobile) / Utente (Desktop) */}
-                        <div className="col-3 d-flex justify-content-end align-items-center p-0 gap-2 gap-lg-3">
+                        <div className="col-4 col-lg-3 d-flex justify-content-end align-items-center p-0 gap-2 gap-lg-3">
 
                             {/* Lente d'ingrandimento, visibile solo su mobile, che può far collassare la barra di ricerca */}
                             <div className="d-flex d-lg-none">
@@ -106,11 +106,11 @@ function MainNavBar() {
 
                             {/* Bottone Utente / Login: sempre visibile a destra */}
                             {user ? (
-                                <div className="d-inline-block">
+                                <div className="d-flex">
                                     <UserProfileButton />
                                 </div>
                             ) : (
-                                <div className="d-none d-sm-inline-flex gap-2">
+                                <div className="d-flex">
                                     <AccessButton onClick={handleLogin} />
                                 </div>
                             )}
