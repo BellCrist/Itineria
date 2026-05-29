@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'injectManifest',
+      workbox: {
+        cleanupOutdatedCaches: true,
+      },
       workbox: {
         // Estende il raggio d'azione della cache anche a richieste esterne o API
         runtimeCaching: [
@@ -46,6 +50,7 @@ export default defineConfig({
         short_name: 'Travelog',
         description: 'Gestisci i tuoi itinerari di viaggio, anche offline',
         theme_color: '#6392f2',
+        version: new Date().toISOString(),
         icons: [
           {
             src: 'pwa-192x192.png',
