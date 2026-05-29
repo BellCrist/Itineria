@@ -1,34 +1,39 @@
-name: Deploy to AWS EC2
+name: Deploy to AWS EC2 via AWS SSM (OIDC)
 
-# La pipeline si attiva da sola ogni volta che fai un push sul branch "main"
 on:
   push:
     branches:
       - main
+
+# Permessi necessari per permettere a GitHub di richiedere il token OIDC ad AWS
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. GitHub scarica l'ultima versione del tuo codice sul suo server virtuale
+      # 1. Scarica il codice
       - name: Checkout del codice
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2. Configura le credenziali per poter parlare con AWS
-      - name: Configura AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      # 2. Autenticazione sicura su AWS tramite OIDC
+      - name: Configura AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 3. Effettua il login sul registro Docker di AWS (ECR)
+      # 3. Login su Amazon ECR
       - name: Login su Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: "true"
 
-      # 4. Compila il Dockerfile del tuo progetto e spinge l'immagine su ECR
+      # 4. Build e Push dell'immagine Docker
       - name: Build e Push dell'immagine su ECR
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
@@ -38,23 +43,17 @@ jobs:
           docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # 5. Si collega via SSH alla EC2 e aggiorna il container in esecuzione
-      - name: Connessione SSH ed Esecuzione Deploy su EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
-
-            docker pull ${{ secrets.ECR_REGISTRY }}/travel-diary:latest
-
-            docker stop itinerary-app || true
-            docker rm itinerary-app || true
-
-            docker run -d \
-              --name itinerary-app \
-              -p 80:8080 \
-              --env-file ./.env.production \
-              ${{ secrets.ECR_REGISTRY }}/travel-diary:latest
+      # 5. Deploy tramite AWS Systems Manager (SSM)
+      - name: Esegui Deploy via AWS SSM Run Command
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploying latest docker image via GitHub Actions" \
+            --parameters 'commands=[
+              "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_REGISTRY }}'",
+              "docker pull '${{ secrets.ECR_REGISTRY }}'/travel-diary:latest",
+              "docker stop itinerary-app || true",
+              "docker rm itinerary-app || true",
+              "docker run -d --name itinerary-app -p 80:8080 --env-file /home/ubuntu/.env.production '${{ secrets.ECR_REGISTRY }}'/travel-diary:latest"
+            ]'
