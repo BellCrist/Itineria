@@ -35,7 +35,6 @@ function UserDataManager() {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
                 alert("Dati salvati con successo!");
             } else {
                 alert("Errore: " + data.message);

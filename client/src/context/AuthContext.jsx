@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
                     method: 'GET',
                     credentials: 'include'
                 });
-console.log(response);
+
                 if (response.status === 401 || response.status === 403) {
                     // const xx = await response.json()
                     // console.log(xx.message);

@@ -25,7 +25,6 @@ const registerUser = async (req, res) => {
             password: hashedPassword
         });
 
-        console.log("New user's auto-generated ID:", newUser.id);
 
         // Generate tokens
         const accessToken = jwt.sign(

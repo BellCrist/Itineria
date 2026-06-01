@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 //Middleware per la validazione del token in entrata dal client.
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.accessToken;
-console.log(req.cookies.accessToken);
+
     if (!token) {
         return res.status(401).json({ message: 'Access token richiesto' });
     }
