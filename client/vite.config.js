@@ -49,8 +49,8 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'TraveLog',
-        short_name: 'Travelog',
+        name: 'Travel-dream',
+        short_name: 'Trv-drm',
         description: 'Gestisci i tuoi itinerari di viaggio, anche offline',
         theme_color: '#6392f2',
         version: new Date().toISOString(),
