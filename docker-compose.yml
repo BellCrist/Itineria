@@ -32,6 +32,18 @@ services:
       JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
     depends_on:
       - db-itineria
+    
+    # --- MODIFICHE PER LO SVILUPPO LOCALE ---
+    command: npm run dev
+    volumes:
+      # Mappa la cartella server locale con quella nel container
+      - ./server:/app/server
+      # Mappa la cartella client locale (se vuoi modificare il frontend in tempo reale)
+      - ./client:/app/client
+      # Evita che i node_modules locali sovrascrivano quelli Linux del container
+      - /app/server/node_modules
+      - /app/client/node_modules
+      - /app/server/public    #Per proteggere la cartella /server/public del container dalla sovrascrittura della cartella locale
 
 volumes:
   db_data:

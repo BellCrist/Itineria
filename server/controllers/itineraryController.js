@@ -204,10 +204,9 @@ const searchItineraries = async (req, res) => {
     }
 
     try {
-        // Usiamo db.Itinerary (assicurati che il nome del modello sia corretto)
         const itineraries = await db.Itinerary.findAll({
             where: {
-                privateItinerary: 1,
+                privateItinerary: 0,
 
                 // Sequelize.where esegue la funzione MySQL JSON_SEARCH in modo sicuro
                 [Op.and]: db.sequelize.where(
@@ -217,7 +216,7 @@ const searchItineraries = async (req, res) => {
                         'one',                         // Cerca la prima occorrenza
                         `%${destination}%`,
                         null,                          // Nessun carattere di escape speciale
-                        '$[*].destination'             // Cerca solo nelle chiavi 'destination'
+                        db.sequelize.Sequelize.literal("'$[*].destination'")             // Cerca solo nelle chiavi 'destination'
                     ),
                     { [Op.not]: null } // Se JSON_SEARCH non restituisce NULL, significa che c'è un match
                 )
