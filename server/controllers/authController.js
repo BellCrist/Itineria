@@ -30,12 +30,12 @@ const registerUser = async (req, res) => {
         const accessToken = jwt.sign(
             { id: newUser.id, email: email, name: name, surname: surname },
             process.env.JWT_SECRET,
-            { expiresIn: '15m' } // Short-lived access token
+            { expiresIn: '15m' }
         );
 
         const refreshToken = crypto.randomBytes(64).toString('hex');
         const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
-        const refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+        const refreshTokenExpiry = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000); // 1 giorno
 
         // Store refresh token hash in database
         await db.RefreshToken.create({
@@ -113,7 +113,7 @@ const refreshToken = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            maxAge: 15 * 60 * 1000 // 15 minuti
         };
 
         res.status(200)
@@ -156,12 +156,12 @@ const login = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user.id, email: user.email, name: user.name, surname: user.surname },
             process.env.JWT_SECRET,
-            { expiresIn: '15m' } // Short-lived access token
+            { expiresIn: '15m' }
         );
 
         const refreshToken = crypto.randomBytes(64).toString('hex');
         const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
-        const refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+        const refreshTokenExpiry = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000); // 1 giorno
 
         // Cancella eventuali vecchi refresh token dell'utente
         await db.RefreshToken.destroy({
@@ -179,14 +179,14 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 15 * 60 * 1000 // 15 minutes
+            maxAge: 15 * 60 * 1000 // 15 minuti
         };
 
         const refreshTokenOptions = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Lax',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+            maxAge: 1 * 24 * 60 * 60 * 1000 // 1 giorno
         };
 
         res.status(200)

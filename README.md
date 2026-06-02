@@ -23,63 +23,61 @@ Una moderna applicazione web full-stack per creare, gestire e condividere itiner
 
 ## 🎯 Funzionalità
 
-### Autenticazione & Utenti
+### Registrazione e autenticazione utenti
 - ✅ **Registrazione** - Creazione di nuovi account utente con validazione
 - ✅ **Login/Logout** - Sistema di autenticazione basato su JWT
 - ✅ **Gestione Profilo** - Visualizzazione e modifica dei dati utente
-- ✅ **Refresh Token** - Token di refresh per sessioni prolungate (7 giorni)
-- ✅ **Password Hashing** - Utilizzo di bcrypt per la sicurezza
 
 ### Itinerari
 - ✅ **Creazione Itinerari** - Creazione di nuovi itinerari con waypoint e descrizioni
-- ✅ **Visualizzazione Lista** - Elenco di tutti gli itinerari dell'utente
+- ✅ **Lista degli itinerari** - Elenco di tutti gli itinerari dell'utente
 - ✅ **Dettagli Itinerario** - Visualizzazione completa di un itinerario con tutti i waypoint
 - ✅ **Modifica Itinerari** - Aggiornamento di itinerari esistenti
 - ✅ **Eliminazione Itinerari** - Cancellazione di itinerari
 - ✅ **Privacy** - Possibilità di rendere gli itinerari privati o pubblici
 
 ### Ricerca & Scoperta
-- ✅ **Ricerca Itinerari** - Ricerca di itinerari pubblici per destinazione
-- ✅ **Filtri Avanzati** - Filtraggio per paese, città e altre caratteristiche
+- ✅ **Ricerca Itinerari** - Ricerca di itinerari pubblici in base alla destinazione
 
 ### Progressive Web App
 - ✅ **Installabilità** - Installazione come app nativa (PWA)
 - ✅ **Offline Support** - Funzionalità base disponibili anche offline
-- ✅ **Service Worker** - Caching intelligente degli assets
+- ✅ **Service Worker** - Caching intelligente degli assets         (TODO da migliorare)
 
 ---
 
 ## 🏗️ Architettura
-SPA con Express che in produzione fornisce direttamente i file statici del frontend.
+Single Page Application con framework Express che in produzione fornisce direttamente i file statici del frontend.
 L'applicazione segue un'architettura **client-server monolitica** con separazione chiara tra frontend e backend.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    Browser (Client)                         │
 │  React 19 + Vite + React Router + Bootstrap                 │ genera l'interfaccia grafica e gestisce la navigazione delle rotte a frontend.
-                                                                esegue chiamate HTTP/REST verso il server.
+|                                                               esegue chiamate HTTP verso gli endpoint del server.
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                  Express.js Server                          │
-│  - JWT Authentication                                       │ Si occupa di validare i dati che riceve dal frontend, dell'autenticazione e autorizzazione.
-│  - Route handlers (auth, itineraries, profile)              │ Gestisce le richieste in arrivo ai vari endpoint.
+│                  Express.js (Server)                        │
+│  - JWT Authentication                                       │ Si occupa di validare i dati che riceve dal frontend, dell'autenticazione e autorizzazione
+│  - Route handlers (auth, itineraries, profile)              │ degli utenti. Gestisce le richieste in arrivo ai vari endpoint.
 │  - Cookie-based session management                          │
 └────────────────────┬────────────────────────────────────────┘
-                     │ SQL
+                     │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│           MySQL Database (via Sequelize ORM)                │
-│  - Users                                                    │ Scelto il database Mysql per la relazione tra i vari dati a disposizione
-│  - Itineraries                                              │ e anche perchè permette la memorizzazione di dati in formato json.
-│  - Refresh Tokens                                           │ Sequelize è l'ORM che è stato scelto per costruire il database e le varie tabelle
-└─────────────────────────────────────────────────────────────┘ ma soprattutto per eseguire le migrations in fase di deploy in produzione.
+│           MySQL Database (via Sequelize ORM)                │ (TODO mettere questa descrizione tra le scelte progettuali)
+│  - Users                                                    │
+│  - Itineraries                                              │
+│  - Refresh Tokens                                           │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### Flusso di Autenticazione
 
 ```
+TODO da rifare tramite diagramma flowchart
 ┌──────────────────────────────────────────────────────────────────┐
 │                     Utente non autenticato                       │
 └──────────────┬───────────────────────────────────────────────────┘
@@ -95,8 +93,9 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
                ▼
     ┌──────────────────────────────────┐
     │ Server genera Access Token (15m) │
-    │ e Refresh Token (7 giorni)       │
-    │ Stored in HttpOnly Cookies       │
+    │ e Refresh Token (1 giorno).      │
+    │ Questi token vengono memorizzati |
+    | dentro i cookie Http Only.       │
     └──────────┬───────────────────────┘
                │
                ▼
@@ -134,7 +133,7 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
 - **Vite PWA Plugin** - Progressive Web App support
 
 ### Backend
-- **Node.js 22 (Alpine)** - Runtime
+- **Node.js 22 (Alpine)** - Js Runtime environment
 - **Express 5** - Framework web
 - **Sequelize 6** - ORM per MySQL
 - **MySQL 8** - Database
@@ -154,33 +153,51 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
 ## 🎨 Scelte Progettuali
 
 ### 1. **Stack Tecnologico**
-- **Vite vs Webpack**: Vite scelto per la velocità di build e HMR istantaneo
-- **React Router v7**: Versione più recente con miglior performance
-- **MySQL + Sequelize**: Relazionale per dati strutturati (utenti, itinerari, token)
+  Per il **frontend** la scelta è ricaduta sulla combinazione di React come libreria per la costruzione dell'interfaccia grafica
+  e Vite come build tool e ambiente di sviluppo.
+  React è stato scelto per la semplicità di utilizzo per chi come me lo utilizza per la prima volta e soprattutto per
+  la possibilità di costruire l'interfaccia grafica attraverso componenti riutilizzabili che facilitano la scrittura e la
+  manutenibilità del codice. Attraverso il suo virtual DOM, React ottimizza gli aggiornamenti della pagina, caricando
+  soltanto le parti del DOM che hanno effettivamente subito variazioni.
+  
+  Vite è attualmente lo strumento di costruzione delle app React più adatto. Garantisce facilità nella preparazione di un ambiente
+  in cui costruire un'app React e attraverso il suo Hot Module Replacement Vite applica la modifica nel browser
+  istantaneamente, senza dover ricaricare l'intera pagina e senza perdere lo stato dell'applicazione.
+
+  Per il **backend** invece è stato scelto Node.js come ambiente runtime di javascript ed Express.js come framework.
+  Entrambe sono state scelte per la facilità di utilizzo e per l'ampia community e documentazione a disposizione.
+  Express è stato utilizzato per:
+  - la creazione e gestione degli endpoint per le chiamate API
+  - utilizzo di Middleware fondamentali per l'app, come la gestione dei cookies, json e CORS.
+
+  Per quanto riguarda la **persistenza dei dati** è stato scelto un database relazionale come Mysql, in grado di
+  memorizzare i dati degli utenti e degli itinerari e sopratutto perchè permette di memorizzare i dati in formato
+  json e questo mi permette di avere una base di dati strutturata e solida, anche per un eventuale riutilizzo di questi dati.
+  Per l'interazione con il database all'interno del progetto ho deciso di utilizzare l'ORM Sequelize per i seguenti motivi:
+    - mappatura delle tabelle tabelle del database direttamente in classi e oggetti
+    - interazione con i dati attraverso metodi nativi
+    - gestione automatica delle relazioni tra tabelle
+    - Utilizzo dei prepared statements
+    - utilizzo delle migration per applicare modifiche alle tabelle. Questo è
+    stato decisivo nella scelta per il porting del progetto in produzione, perchè in automatico
+    Sequelize, ogni volta che rileva delle nuove migrations, le applica al database, senza doversi
+    collegare da remoto direttamente al database e dover lanciare i comandi manualmente.
 
 ### 2. **Autenticazione**
 - **JWT + Refresh Token Pattern**:
-  - Access token breve (15 min) per sicurezza
-  - Refresh token lungo (7 giorni) per user experience
-  - HttpOnly cookies per protezione XSS
+  In fase di autenticazione il sistema rilascia due token JWT:
+    1. Access token, con validità 15 minuti, che sarà utilizzato per verificare l'identità e la validità della sessione dell'utente.
+    2. Refresh token, con validità 1 giorno, che viene utilizzato per refreshare l'access token nel caso sia scaduto.
+  
+  Entrambi i token hanno l'opzione 'HttpOnly' per evitare che siano disponibili ad eventuali codici javascript malevoli.
 - **Bcrypt**: 10 salt rounds per hashing sicuro
 
-### 3. **Architettura Backend**
-- **Controller-based**: Logica separata per auth, itineraries, profile
-- **Middleware**: Autenticazione centralizzata via cookies
-- **SPA Fallback**: Serve index.html per React Router (ultima route)
 
-### 4. **Database Design**
-- **Migrations**: Sequelize migrations per versionamento schema
-- **Relationships**: User → Itineraries (1:N), User → RefreshTokens (1:N)
-- **Soft Design**: Permet di aggiungere future features (condivisioni, rating, etc.)
-
-### 5. **Security**
-- **CORS**: Configurabile per production
-- **HttpOnly Cookies**: Protezione XSS/CSRF
+### 5. **Sicurezza**
+- **CORS**: Viene utilizzato il middleware CORS di Express per lo scambio di risorse solo tra fonti valide
+- **HttpOnly Cookies**: Protezione XSS
 - **Password Hashing**: Bcrypt con salt
-- **JWT Secrets**: Differenziati per ambienti
-- **Input Validation**: Lato server per tutti gli input
+- **JWT Secrets**: Utilizzato per la firma dell'accessToken
 
 ### 6. **Build Monolitico**
 - **Multi-stage Dockerfile**:
@@ -188,25 +205,25 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
   - Stage 2: Setup server Node + client compilato
 - **Vantaggi**: Single deployment, versioning unificato
 - **Scaling**: Client statico servito da Express, database separabile
+  Il container che verrà generato poi comunicherà con l'istanza del database presente su
+  AWS RDS.
 
 ### 7. **Progressive Web App**
-- **Offline First**: Service worker per caching intelligente
+- **Offline First**: Service worker per caching di alcune risorse
 - **Installabilità**: Web manifest per "Add to Home Screen"
-- **Performance**: Compressione assets, lazy loading
 
 ---
 
 ## 📋 Prerequisiti
 
-### Locale
+### Per Docker (Consigliato)
+- **Docker** >= 20.10
+- **Docker Compose** >= 1.29
+
+### Per Sviluppo Locale (opzionale)
 - **Node.js** >= 18 (consigliato 20+)
 - **npm** >= 9
 - **MySQL** >= 8.0 (oppure via Docker)
-- **Git**
-
-### Docker
-- **Docker** >= 20.10
-- **Docker Compose** >= 1.29
 
 ---
 
@@ -219,42 +236,56 @@ git clone https://github.com/cristianbellesi/itinerary-app.git
 cd itinerary-app
 ```
 
-### 2. Setup Database (via Docker o locale)
+---
 
-#### Opzione A: Docker Compose (Consigliato)
+## ▶️ 2. Esecuzione
+
+### Metodo 1: Docker Compose (Consigliato - Producton-like)
+
+**Primo avvio:**
 ```bash
+docker-compose up -d --build
+```
+
+**Avvii successivi:**
+```bash
+docker-compose up -d
+```
+
+**Accedi a:** http://localhost:8080
+
+**Verifica che i container sono in esecuzione**
+```bash
+docker-compose ps
+```
+
+**Visualizza i log:**
+```bash
+docker-compose logs -f server    # Solo backend
+docker-compose logs -f           # Tutti i servizi
+```
+
+**Stop:**
+```bash
+docker-compose down
+```
+Questo sarebbe il risultato ottenuto:
+
+
+### Metodo 2: Sviluppo Locale (2 terminali)
+
+Se preferisci sviluppare senza Docker:
+
+**Setup iniziale (una volta sola):**
+```bash
+# Database via Docker (opzionale)
 docker-compose up -d db-itineria
-```
 
-#### Opzione B: MySQL locale
-```bash
-# macOS (brew)
-brew install mysql
-brew services start mysql
-
-# Ubuntu/Debian
-sudo apt-get install mysql-server
-sudo systemctl start mysql
-
-# Crea database e utente
-mysql -u root -p << EOF
-CREATE DATABASE itineria_db;
-CREATE USER 'admin-user-itineria'@'localhost' IDENTIFIED BY 'llha23_gg#9Fa';
-GRANT ALL PRIVILEGES ON itineria_db.* TO 'admin-user-itineria'@'localhost';
-FLUSH PRIVILEGES;
-EOF
-```
-
-### 3. Setup Server
-
-```bash
+# Server
 cd server
-
-# Installa dipendenze
+#installa le dipendenze
 npm install
-
-# Configura environment (copia template o crea file)
-cat > .env << EOF
+#crea un nuovo file .env copiando all'interno il seguente contenuto:
 NODE_ENV=development
 PORT=8080
 CORS_ORIGIN=http://localhost:5173
@@ -263,31 +294,18 @@ DB_PORT=3306
 DB_NAME=itineria_db
 DB_USER=admin-user-itineria
 DB_PASSWORD=llha23_gg#9Fa
-JWT_SECRET=your-secret-key-change-in-production
-EOF
+JWT_SECRET=your-secret-key
 
-# Esegui migrazioni database
+#lancia le migrations per il database
 npm run db:migrate
 
 cd ..
-```
 
-### 4. Setup Client
-
-```bash
+# Client
 cd client
-
-# Installa dipendenze
 npm install
-
 cd ..
 ```
-
----
-
-## ▶️ Esecuzione
-
-### Modalità Sviluppo (2 terminali)
 
 **Terminal 1 - Server Express**
 ```bash
@@ -305,78 +323,25 @@ npm run dev
 
 Accedi a **http://localhost:5173**
 
-### Modalità Produzione (Locale)
+### Variabili d'Ambiente
 
-```bash
-# Build client
-cd client
-npm run build
+Le variabili sono definite direttamente nel `docker-compose.yml`. Per cambiarle, modifica il file:
 
-# Avvia server in produzione
-cd ../server
-npm install --only=production
-npm run start:prod
-# App disponibile su http://localhost:8080
-```
-
----
-
-## 🐳 Docker
-
-### Build dell'Immagine
-
-```bash
-docker build -t itinerary-app:latest .
-```
-
-### Esecuzione con Docker Compose
-
-```bash
-# Avvia client, server e database
-docker-compose up -d
-
-# Logs
-docker-compose logs -f
-
-# Stop
-docker-compose down
-```
-
-L'app sarà disponibile su:
-- **Frontend**: http://localhost
-- **Backend API**: http://localhost:8080/api
-
-### Variabili d'Ambiente in Docker
-
-Crea un file `.env.docker`:
-
-```bash
-NODE_ENV=production
-PORT=8080
-CORS_ORIGIN=http://localhost
-DB_HOST=db-itineria
-DB_PORT=3306
-DB_NAME=itineria_db
-DB_USER=admin-user-itineria
-DB_PASSWORD=llha23_gg#9Fa
-JWT_SECRET=your-production-secret
-```
-
-Avvia con:
-```bash
-docker-compose --env-file .env.docker up -d
+```yaml
+environment:
+  NODE_ENV: development
+  PORT: 8080
+  DB_HOST: db-itineria
+  DB_PORT: 3306
+  DB_NAME: itineria_db
+  DB_USER: admin-user-itineria
+  DB_PASSWORD: llha23_gg#9Fa
+  JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
 ```
 
 ---
 
 ## 🧪 Testing
-
-### Linting (Frontend)
-
-```bash
-cd client
-npm run lint
-```
 
 ### Test Manuali API
 
@@ -442,7 +407,7 @@ curl -X POST http://localhost:8080/api/auth/register \
   }'
 ```
 
-### Credenziali Database
+### Credenziali Database in locale
 
 - **Database**: `itineria_db`
 - **Username**: `admin-user-itineria`
@@ -455,8 +420,8 @@ curl -X POST http://localhost:8080/api/auth/register \
 
 ### Base URL
 ```
-Development: http://localhost:8080
-Production: https://yourdomain.com
+Development: vedere i vari riferimenti in base alla modalità di esecuzione dell'app in locale
+Production: https://travel-dream.duckdns.org
 ```
 
 ### Autenticazione
@@ -518,7 +483,7 @@ Effettua il login di un utente.
 
 **Cookies Impostati:**
 - `accessToken` (HttpOnly, 15 min)
-- `refreshToken` (HttpOnly, 7 giorni)
+- `refreshToken` (HttpOnly, 1 giorno)
 
 ---
 
@@ -671,75 +636,7 @@ Aggiorna il profilo dell'utente.
 
 ---
 
-## 📁 Struttura del Progetto
-
-```
-itinerary-app/
-├── client/                          # Frontend React + Vite
-│   ├── src/
-│   │   ├── pages/                   # Pagine (Home, Login, Profile, etc.)
-│   │   ├── components/              # Componenti riusabili
-│   │   ├── layout/                  # Componenti layout (Form, Slider, etc.)
-│   │   ├── context/                 # AuthContext
-│   │   ├── css/                     # Styling per componenti
-│   │   ├── assets/                  # Immagini e risorse
-│   │   ├── App.jsx                  # Routes definition
-│   │   └── main.jsx                 # Entry point
-│   ├── public/                      # Static assets
-│   ├── vite.config.js               # Vite configuration
-│   ├── package.json
-│   └── eslint.config.js
-│
-├── server/                          # Backend Express
-│   ├── controllers/                 # Business logic
-│   │   ├── authController.js        # Auth logic (register, login, refresh)
-│   │   ├── itineraryController.js   # Itinerary CRUD
-│   │   └── profileController.js     # Profile management
-│   ├── routes/                      # API routes
-│   │   ├── authRoutes.js
-│   │   ├── itineraryRoutes.js
-│   │   └── profileRoutes.js
-│   ├── middleware/                  # Express middleware
-│   │   └── authMiddleware.js        # JWT verification
-│   ├── database/
-│   │   ├── models/                  # Sequelize models
-│   │   │   ├── user.js
-│   │   │   ├── itinerary.js
-│   │   │   └── refreshToken.js
-│   │   ├── migrations/              # DB migrations (Sequelize)
-│   │   ├── seeders/                 # Optional seed data
-│   │   └── config/                  # Database config
-│   ├── server.js                    # Express app setup
-│   ├── package.json
-│   └── .env                         # Environment variables
-│
-├── docker-compose.yml               # Multi-container setup
-├── Dockerfile                       # Multi-stage build
-├── README.md                        # This file
-├── DEPLOY.md                        # Deployment instructions (AWS)
-└── LICENSE
-```
-
----
-
-## 🔐 Sicurezza in Produzione
-
-Quando deployi in produzione:
-
-1. **Cambia tutte le credenziali** (JWT_SECRET, DB password)
-2. **Usa HTTPS** (certificati SSL/TLS)
-3. **Configura CORS correttamente** con il tuo dominio
-4. **Imposta Node_ENV=production**
-5. **Usa environment variables** da AWS Secrets Manager, HashiCorp Vault, etc.
-6. **Abilita rate limiting** per le API
-7. **Setup monitoring e logging** (CloudWatch, Sentry, etc.)
-8. **Backup regolari** del database
-
-Vedi [DEPLOY.md](DEPLOY.md) per istruzioni AWS EC2.
-
----
-
-## 📚 Migrazioni Database
+## 📚 Migrazioni manuali database in locale
 
 ### Visualizzare stato migrazioni
 ```bash
@@ -769,36 +666,6 @@ mysql -u admin-user-itineria -p -h 127.0.0.1 itineria_db
 # Se usa Docker
 docker-compose logs db-itineria
 ```
-
-### Port già in uso
-```bash
-# Frontend (5173)
-lsof -i :5173
-kill -9 <PID>
-
-# Backend (8080)
-lsof -i :8080
-kill -9 <PID>
-
-# MySQL (3306)
-lsof -i :3306
-kill -9 <PID>
-```
-
-### Cookie non salvati
-- Verifica CORS_ORIGIN sia corretto
-- Assicurati che `credentials: true` è impostato nel frontend
-- Controlla che i cookie non sono bloccati dal browser
-
-### Migrazioni falliscono
-```bash
-# Resetta database (DEV ONLY!)
-cd server
-npx sequelize-cli db:drop
-npx sequelize-cli db:create
-npm run db:migrate
-```
-
 ---
 
 ## 📄 Licenza
@@ -807,4 +674,4 @@ Questo progetto è licensiato sotto [LICENSE](LICENSE).
 
 ---
 
-**Ultimo aggiornamento**: Maggio 2026
+**Ultimo aggiornamento**: Giugno 2026
