@@ -1,3 +1,4 @@
+<img width="451" height="321" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/2b3899e1-231b-4aee-b24c-9f73076f4f25" />
 # 🌍 Itinerary App
 
 Una moderna applicazione web full-stack per creare, gestire e condividere itinerari di viaggio. Gli utenti possono pianificare i loro viaggi con waypoint dettagliati, salvare i propri itinerari e visualizzare i dettagli delle loro destinazioni.
@@ -270,6 +271,7 @@ docker-compose logs -f           # Tutti i servizi
 docker-compose down
 ```
 Questo sarebbe il risultato ottenuto:
+<img width="451" height="321" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/e2195cc1-2671-4cbd-8c36-c5b33f4e08e4" />
 
 
 ### Metodo 2: Sviluppo Locale (2 terminali)
