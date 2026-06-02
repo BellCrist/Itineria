@@ -73,7 +73,7 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
 │  - Refresh Tokens                                           │
 └─────────────────────────────────────────────────────────────┘
 ```
-<img width="831" height="740" alt="system architecture drawio" src="https://github.com/user-attachments/assets/a6a0fd92-c2e6-46ae-9971-b28b6538f902" />
+<img width="731" height="540" alt="system architecture drawio" src="https://github.com/user-attachments/assets/a6a0fd92-c2e6-46ae-9971-b28b6538f902" />
 
 
 ### Flusso di Autenticazione
