@@ -1,4 +1,3 @@
-<img width="451" height="321" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/2b3899e1-231b-4aee-b24c-9f73076f4f25" />
 # 🌍 Itinerary App
 
 Una moderna applicazione web full-stack per creare, gestire e condividere itinerari di viaggio. Gli utenti possono pianificare i loro viaggi con waypoint dettagliati, salvare i propri itinerari e visualizzare i dettagli delle loro destinazioni.
@@ -74,6 +73,8 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
 │  - Refresh Tokens                                           │
 └─────────────────────────────────────────────────────────────┘
 ```
+<img width="831" height="740" alt="system architecture drawio" src="https://github.com/user-attachments/assets/a6a0fd92-c2e6-46ae-9971-b28b6538f902" />
+
 
 ### Flusso di Autenticazione
 
@@ -271,6 +272,7 @@ docker-compose logs -f           # Tutti i servizi
 docker-compose down
 ```
 Questo sarebbe il risultato ottenuto:
+<br>
 <img width="451" height="321" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/e2195cc1-2671-4cbd-8c36-c5b33f4e08e4" />
 
 
