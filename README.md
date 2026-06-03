@@ -60,21 +60,37 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  Express.js (Server)                        │
-│  - JWT Authentication                                       │ Si occupa di validare i dati che riceve dal frontend, dell'autenticazione e autorizzazione
-│  - Route handlers (auth, itineraries, profile)              │ degli utenti. Gestisce le richieste in arrivo ai vari endpoint.
+│  - JWT Authentication                                       │ Si occupa di validare i dati che riceve dal frontend, dell'autenticazione e
+│  - Route handlers (auth, itineraries, profile)              │ autorizzazione degli utenti. Gestisce le richieste in arrivo ai vari endpoint.
 │  - Cookie-based session management                          │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│           MySQL Database (via Sequelize ORM)                │ (TODO mettere questa descrizione tra le scelte progettuali)
+│           MySQL Database (via Sequelize ORM)                │
 │  - Users                                                    │
 │  - Itineraries                                              │
 │  - Refresh Tokens                                           │
 └─────────────────────────────────────────────────────────────┘
 ```
 <img width="731" height="540" alt="system architecture drawio" src="https://github.com/user-attachments/assets/a6a0fd92-c2e6-46ae-9971-b28b6538f902" />
+<br>
 
+In produzione queste entità sono state organizzate con la seguente struttura:
+  - Immagine docker caricata su AWS ECR (Elastic Container Registry)
+  - In una macchina EC2 viene eseguito il container dell'app
+  - Sempre su EC2 è stato installato il web server nginx che agisce anche da reverse proxy
+  - è stato riservato il sotto dominio **travel-dream.duckdns.org**
+  - Al web server è stato applicato un certificato SSL per la comunicazione tramite https e sicurezza dei dati
+  - Il database mysql è in esecuzione all'interno del servizio AWS RDS
+  - Sono state configurate delle specifiche regole all'interno del security group per:
+    1. Far collegare l'admin del sistema da remoto alla macchina EC2 in ssh tramite l'apposita chiave privata.
+    2. Permettere alla macchina EC2 di ricevere richieste sulla porta 80 e 443 da qualsiasi indirizzo ip
+    3. Permettere all'admin di potersi collegare da remoto al database. In questo caso viene sfruttata la macchina EC2
+      che funge da tunnel ssh.
+    4. Alla macchina EC2 ho collegato un ip pubblico "fisso", in modo che se il server dovesse riavviarsi, anche cambiando ip,
+      il riferimento pubblico rimarrebbe lo stesso. Per questa funzionalità ho utilizzato il servizio Elastic IP di AWS. Ho
+      dovuto eseguire questa configurazione nel momento in cui sono andato a riservare un dominio pubblico su DuckDns.
 
 ### Flusso di Autenticazione
 

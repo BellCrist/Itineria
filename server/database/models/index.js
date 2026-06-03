@@ -3,6 +3,7 @@ import path from 'path';
 import process from 'process';
 import { DataTypes, Sequelize } from 'sequelize';
 import { fileURLToPath } from 'url';
+import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 
 // Per gestire __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -30,11 +31,34 @@ if (!config) {
 
 const db = {};
 
+//Logica di recupero della password (solo in produzione)
+let dbPassword = config.password;
+
+if (normalizedEnv === 'production') {
+  console.log('Recupero della password da AWS SSM Parameter Store...');
+
+  const ssmClient = new SSMClient({ region: process.env.AWS_REGION || 'eu-south-1' });
+  const command = new GetParameterCommand({
+    Name: '/travel-dream/db_password', // path esatto dello store parameter su AWS
+    WithDecryption: true,             // true perchè c'è secureString su AWS
+  });
+
+  try {
+    const ssmResponse = await ssmClient.send(command);
+    dbPassword = ssmResponse.Parameter.Value;
+    console.log('Password del database recuperata e decifrata con successo.');
+  } catch (error) {
+    console.error('Errore nel recupero della password da AWS SSM:', error);
+    throw error;
+  }
+}
+
+// Inizializzazione di Sequelize
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, dbPassword, config);
 }
 
 // Lettura dei file dei modelli
@@ -52,17 +76,16 @@ async function loadModels() {
   for (const file of files) {
     const modelPath = path.resolve(__dirname, file);
     const { default: modelFactory } = await import(`file://${modelPath}`);
-    
-    // Eseguiamo la factory function che ritorna il modello
+
+    //factory function che ritorna il modello
     const model = modelFactory(sequelize, DataTypes);
     db[model.name] = model;
   }
 }
 
-// Carichiamo i modelli
 await loadModels();
 
-// Gestione delle associazioni (associate)
+// Gestione delle associazioni
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
