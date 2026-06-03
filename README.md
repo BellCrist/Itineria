@@ -379,7 +379,8 @@ environment:
 
   Infine il flusso specifico delle operazioni da eseguire è stato riportato all'interno del
   file deploy.yml dentro la cartella .github/workflows del progetto.
-  <b>
+  
+  <br>
   <img width="757" height="676" alt="deploy pipeline" src="https://github.com/user-attachments/assets/846fc15c-7c7b-449b-9400-11a730485008" />
   <br>
 
