@@ -94,9 +94,9 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 <br>
 <img width="852" height="648" alt="production_final_architecture" src="https://github.com/user-attachments/assets/225f65c4-53a3-46a5-acc1-a9974c4b6d90" />
 <br>
-### Flusso di Autenticazione
 
-```
+## Flusso di Autenticazione
+
 TODO da rifare tramite diagramma flowchart
 ┌──────────────────────────────────────────────────────────────────┐
 │                     Utente non autenticato                       │
@@ -135,11 +135,10 @@ TODO da rifare tramite diagramma flowchart
     │ Refresh Token Flow   │  │ Usa Access Token   │
     │ Genera nuovo token   │  │ per API requests   │
     └──────────────────────┘  └────────────────────┘
-```
 
 ---
 
-## 🛠️ Tecnologie
+## 🛠️ Tecnologie utilizzate
 
 ### Frontend
 - **React 19** - UI framework
@@ -362,7 +361,26 @@ environment:
 ```
 
 ---
+## Pipeline CI/CD
 
+  Per organizzare la pipeline di continuous integration continuous delivery/deployment
+  sono state combinate le funzionalità di github actions con la struttura presente nell'ambiente
+  di produzione AWS.
+  Quindi per ogni push che viene eseguito nel branch main viene attivata la pipeline.
+  Il flusso della pipeline è quello presente nella seguente immagine.
+  La parte più difficile è stata quella di far comunicare github con i relativi servizi
+  AWS. Questo è stato possibile configurando l'identity provider Open ID Connect e associandolo
+  ad uno specifico IAM Role di tipo web identity, con i permessi per comunicare con il
+  container registry e per inviare comandi all'agente SSM di AWS.
+  
+  Dopodichè anche la macchina EC2 è stata abilitata a comunicare con l'SSM agent e sono stati
+  configurati i secrets all'interno della repository github per conservare in maniera sicura
+  gli endpoint e le informazioni utili per comunicare con i servizi AWS.
+
+  Infine il flusso specifico delle operazioni da eseguire è stato riportato all'interno del
+  file deploy.yml dentro la cartella .github/workflows del progetto.
+
+---
 ## 🧪 Testing
 
 ### Test Manuali API
