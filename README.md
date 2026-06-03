@@ -91,7 +91,9 @@ In produzione queste entità sono state organizzate con la seguente struttura:
     4. Alla macchina EC2 ho collegato un ip pubblico "fisso", in modo che se il server dovesse riavviarsi, anche cambiando ip,
       il riferimento pubblico rimarrebbe lo stesso. Per questa funzionalità ho utilizzato il servizio Elastic IP di AWS. Ho
       dovuto eseguire questa configurazione nel momento in cui sono andato a riservare un dominio pubblico su DuckDns.
-
+<br>
+<img width="852" height="648" alt="production_final_architecture" src="https://github.com/user-attachments/assets/225f65c4-53a3-46a5-acc1-a9974c4b6d90" />
+<br>
 ### Flusso di Autenticazione
 
 ```
