@@ -1,4 +1,4 @@
-import { SSMClient } from '@aws-sdk/client-ssm';
+import { SSMClient, GetParametersCommand } from '@aws-sdk/client-ssm';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
