@@ -34,7 +34,7 @@ COPY server/package*.json ./
 RUN npm ci --only=production && npm install -g sequelize-cli
 # Copia il codice sorgente del server
 COPY server/ ./
-# CORREZIONE: Copia il file rinominato senza estensione .cjs nella cartella /app/server
+# Copia il file rinominato senza estensione .cjs nella cartella /app/server
 COPY .sequelizerc ./
 # Copia il client compilato dal stage 1 nella cartella public del server
 COPY --from=client-build /app/client/dist ./public

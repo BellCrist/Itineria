@@ -28,14 +28,14 @@ services:
       DB_HOST: db-itineria
       DB_PORT: 3306
       DB_NAME: itineria_db
-      DB_USER: root
+      DB_USER: admin-user-itineria
       DB_PASSWORD: llha23_gg#9Fa
       JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
     depends_on:
       - db-itineria
     
-    # --- MODIFICHE PER LO SVILUPPO LOCALE ---
-    command: npm run dev
+    # --- Avvio dell'ambiente di sviluppo + migrations  ---
+    command: sh -c "npx sequelize-cli db:migrate && npm run dev"
     volumes:
       # Mappa la cartella server locale con quella nel container
       #- ./server:/app/server

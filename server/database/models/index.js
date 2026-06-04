@@ -69,13 +69,6 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, dbPassword, config);
 }
 
-
-
-
-console.log(config,sequelize);
-
-
-
 // Lettura dei file dei modelli
 const files = fs.readdirSync(__dirname).filter(file => {
   return (
