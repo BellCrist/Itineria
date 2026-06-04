@@ -16,6 +16,9 @@ COPY server/package*.json ./
 RUN npm install && npm install -g sequelize-cli
 COPY server/ ./
 COPY .sequelizerc ./
+COPY --from=client-build /app/client/dist ./public
+EXPOSE 8080
+ENV PORT=8080
 ENV NODE_ENV=development
 CMD ["npm", "run", "dev"]
 
