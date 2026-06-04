@@ -1,4 +1,4 @@
-import { SSMClient, GetParametersCommand } from '@aws-sdk/client-ssm';
+import { GetParametersCommand, SSMClient } from '@aws-sdk/client-ssm';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
@@ -68,6 +68,13 @@ if (config.use_env_variable) {
 } else {
   sequelize = new Sequelize(config.database, config.username, dbPassword, config);
 }
+
+
+
+
+console.log(config,sequelize);
+
+
 
 // Lettura dei file dei modelli
 const files = fs.readdirSync(__dirname).filter(file => {

@@ -41,4 +41,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server in esecuzione sulla porta ${PORT}`);
+    console.log(corsOrigin);
 })
