@@ -32,8 +32,7 @@ services:
       DB_PASSWORD: llha23_gg#9Fa
       JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
     depends_on:
-      db-itineria:
-        condition: service_healthy
+      - db-itineria
     
     # --- MODIFICHE PER LO SVILUPPO LOCALE ---
     command: npm run dev
