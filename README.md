@@ -97,44 +97,10 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 
 ## Flusso di Autenticazione
 
-TODO da rifare tramite diagramma flowchart
-┌──────────────────────────────────────────────────────────────────┐
-│                     Utente non autenticato                       │
-└──────────────┬───────────────────────────────────────────────────┘
-               │
-               ▼
-    ┌─────────────────────┐
-    │  Registration Page  │
-    │    o Login Page     │
-    └──────────┬──────────┘
-               │
-     Credenziali valide
-               │
-               ▼
-    ┌──────────────────────────────────┐
-    │ Server genera Access Token (15m) │
-    │ e Refresh Token (1 giorno).      │
-    │ Questi token vengono memorizzati |
-    | dentro i cookie Http Only.       │
-    └──────────┬───────────────────────┘
-               │
-               ▼
-    ┌──────────────────────────┐
-    │ Utente autenticato       │
-    │ Accesso alle rotte       │
-    │ protette                 │
-    └──────────┬───────────────┘
-               │
-    Token scaduto?
-               │
-          Sì  │  No
-               │ ├──────────────────┐
-               │                    │
-               ▼                    ▼
-    ┌──────────────────────┐  ┌────────────────────┐
-    │ Refresh Token Flow   │  │ Usa Access Token   │
-    │ Genera nuovo token   │  │ per API requests   │
-    └──────────────────────┘  └────────────────────┘
+<br>
+<img width="614" height="737" alt="Flusso di autenticazione" src="https://github.com/user-attachments/assets/1380874f-37ae-49a7-9646-cd0c5f205828" />
+<br>
+
 
 ---
 
