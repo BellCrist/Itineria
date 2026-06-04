@@ -323,7 +323,7 @@ environment:
   DB_NAME: itineria_db
   DB_USER: admin-user-itineria
   DB_PASSWORD: llha23_gg#9Fa
-  JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
+  JWT_SECRET: your_local_secret_key
 ```
 
 ---

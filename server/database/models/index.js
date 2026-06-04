@@ -1,9 +1,9 @@
+import { SSMClient } from '@aws-sdk/client-ssm';
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
 import { DataTypes, Sequelize } from 'sequelize';
 import { fileURLToPath } from 'url';
-import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 
 // Per gestire __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -31,24 +31,32 @@ if (!config) {
 
 const db = {};
 
-//Logica di recupero della password (solo in produzione)
+//Logica di recupero dei parameter store (solo in produzione)
 let dbPassword = config.password;
 
 if (normalizedEnv === 'production') {
-  console.log('Recupero della password da AWS SSM Parameter Store...');
+  console.log('Recupero dei parameters store da AWS SSM Parameter Store...');
 
   const ssmClient = new SSMClient({ region: process.env.AWS_REGION || 'eu-south-1' });
-  const command = new GetParameterCommand({
-    Name: '/travel-dream/db_password', // path esatto dello store parameter su AWS
+  const command = new GetParametersCommand({
+    Name: ['/travel-dream/db_password','/travel-dream/jwt_secret'], // path esatto degli store parameters su AWS
     WithDecryption: true,             // true perchè c'è secureString su AWS
   });
 
   try {
     const ssmResponse = await ssmClient.send(command);
-    dbPassword = ssmResponse.Parameter.Value;
-    console.log('Password del database recuperata e decifrata con successo.');
+    //Mappature degli store parameter dentro un oggetto
+    const secrets = {};
+    ssmResponse.Parameters.forEach(p => {
+      secrets[p.Name] = p.Value;
+    });
+
+    dbPassword = secrets['/travel-dream/db_password'];
+    process.env.JWT_SECRET = secrets['/travel-dream/jwt_secret'];
+    
+    console.log('Parameter store recuperati con successo.');
   } catch (error) {
-    console.error('Errore nel recupero della password da AWS SSM:', error);
+    console.error('Errore nel recupero dei parameter store da AWS SSM:', error);
     throw error;
   }
 }
