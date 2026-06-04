@@ -227,32 +227,35 @@ cd travel-diary
 
 ### Metodo 1: Docker Compose (Consigliato - Producton-like)
 
+  (Utilizzare 'docker-compose' se in locale hai installato la versione 1, altrimenti
+  utilizzare 'docker compose nei vari comandi)
+
 **Primo avvio:**
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 **Avvii successivi:**
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 **Accedi a:** http://localhost:8080
 
 **Verifica che i container sono in esecuzione**
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 **Visualizza i log:**
 ```bash
-docker-compose logs -f server    # Solo backend
-docker-compose logs -f           # Tutti i servizi
+docker compose logs -f server    # Solo backend
+docker compose logs -f           # Tutti i servizi
 ```
 
 **Stop:**
 ```bash
-docker-compose down
+docker compose down
 ```
 Questo sarebbe il risultato ottenuto:
 <br>
@@ -266,7 +269,7 @@ Se preferisci sviluppare senza Docker:
 **Setup iniziale (una volta sola):**
 ```bash
 # Database via Docker (opzionale)
-docker-compose up -d db-itineria
+docker compose up -d db-itineria
 
 # Server
 cd server
@@ -674,7 +677,7 @@ npx sequelize-cli migration:create --name add-new-column
 mysql -u admin-user-itineria -p -h 127.0.0.1 itineria_db
 
 # Se usa Docker
-docker-compose logs db-itineria
+docker compose logs db-itineria
 ```
 ---
 

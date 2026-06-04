@@ -17,6 +17,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: development
     container_name: server-container
     restart: always
     ports:
