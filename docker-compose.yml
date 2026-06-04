@@ -28,7 +28,7 @@ services:
       DB_HOST: db-itineria
       DB_PORT: 3306
       DB_NAME: itineria_db
-      DB_USER: admin-user-itineria
+      DB_USER: root
       DB_PASSWORD: llha23_gg#9Fa
       JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
     depends_on:
@@ -38,7 +38,7 @@ services:
     command: npm run dev
     volumes:
       # Mappa la cartella server locale con quella nel container
-      - ./server:/app/server
+      #- ./server:/app/server
       # Mappa la cartella client locale (se vuoi modificare il frontend in tempo reale)
       - ./client:/app/client
       # Evita che i node_modules locali sovrascrivano quelli Linux del container
