@@ -39,7 +39,7 @@ if (normalizedEnv === 'production') {
 
   const ssmClient = new SSMClient({ region: process.env.AWS_REGION || 'eu-south-1' });
   const command = new GetParametersCommand({
-    Name: ['/travel-dream/db_password','/travel-dream/jwt_secret'], // path esatto degli store parameters su AWS
+    Names: ['/travel-dream/db_password','/travel-dream/jwt_secret'], // path esatto degli store parameters su AWS
     WithDecryption: true,             // true perchè c'è secureString su AWS
   });
 
