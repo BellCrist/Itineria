@@ -5,7 +5,7 @@ export default {
         username: process.env.DB_USER || 'admin-user-itineria',
         password: process.env.DB_PASSWORD || 'llha23_gg#9Fa',
         database: process.env.DB_NAME || 'itineria_db',
-        host: process.env.DB_HOST || '127.0.0.1',
+        host: process.env.DB_HOST || 'db-itineria',
         port: process.env.DB_PORT || 3306,
         dialect: 'mysql'
     },

@@ -12,6 +12,11 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   server:
     build:
@@ -32,7 +37,8 @@ services:
       DB_PASSWORD: llha23_gg#9Fa
       JWT_SECRET: T%&@2V#mefwyyG@QKR6e^hqzUFfZ%xgwEpehKbQV^wX^gEy3
     depends_on:
-      - db-itineria
+      db-itineria:
+        condition: service_healthy
     
     # --- MODIFICHE PER LO SVILUPPO LOCALE ---
     command: npm run dev
