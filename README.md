@@ -217,8 +217,8 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 ### 1. Clone del Repository
 
 ```bash
-git clone https://github.com/cristianbellesi/itinerary-app.git
-cd itinerary-app
+git clone https://github.com/BellCrist/travel-diary.git
+cd travel-diary
 ```
 
 ---
