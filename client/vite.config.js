@@ -14,14 +14,13 @@ export default defineConfig({
         // Estende il raggio d'azione della cache anche a richieste esterne o API
         runtimeCaching: [
           {
-            // IMPORTANTE: Le rotte di auth NON devono essere cachate - sempre fresh dal server
+            // Le rotte di auth non vengono cachate - sempre fresh dal server
             urlPattern: /\/api\/auth\/.*/i,
             handler: 'NetworkOnly',
           },
           {
-            // Supponendo che le tue chiamate al server inizino con /api/
             urlPattern: /\/api\/(?!auth\/).*/i,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'api-data-cache',
               expiration: {
