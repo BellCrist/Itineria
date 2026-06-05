@@ -275,6 +275,8 @@ docker compose up -d db-itineria
 cd server
 #installa le dipendenze
 npm install
+
+cd ..
 #crea un nuovo file .env copiando all'interno il seguente contenuto:
 NODE_ENV=development
 PORT=8080
@@ -286,6 +288,7 @@ DB_USER=admin-user-itineria
 DB_PASSWORD=llha23_gg#9Fa
 JWT_SECRET=your-secret-key
 
+cd server
 #lancia le migrations per il database
 npm run db:migrate
 
