@@ -15,7 +15,7 @@ WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm install && npm install -g sequelize-cli
 COPY server/ ./
-COPY .sequelizerc ./
+COPY server/.sequelizerc ./
 COPY --from=client-build /app/client/dist ./public
 EXPOSE 8080
 ENV PORT=8080

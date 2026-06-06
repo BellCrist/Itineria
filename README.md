@@ -257,7 +257,7 @@ docker compose logs -f           # Tutti i servizi
 ```bash
 docker compose down
 ```
-Questo sarebbe il risultato ottenuto:
+Questa sarebbe la struttura finale:
 <br>
 <img width="451" height="321" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/e2195cc1-2671-4cbd-8c36-c5b33f4e08e4" />
 
