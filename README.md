@@ -294,13 +294,16 @@ cd ..
 
 # Client
 cd client
-npm install
+npm install --legacy-peer-deps
+(nel caso ci fossero problemi con i permessi dell'utente dovuti ad una vecchia esecuzione
+tramite il metodo 1 con docker, lancia il seguente comando:
+sudo chown -R $USER:$USER /path_del_progetto_in_locale/travel-diary/client)
 cd ..
 ```
 
 **Terminal 1 - Server Express**
 ```bash
-cd server
+cd ../server
 npm run dev
 # Server in esecuzione su http://localhost:8080
 ```

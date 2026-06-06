@@ -77,5 +77,15 @@ export default defineConfig({
         enabled: true
       }
     })
-  ]
+  ],
+  // Configurazione del server di sviluppo con Proxy per Express
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080', // Assicurati che la porta del backend sia questa
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })
