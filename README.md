@@ -283,8 +283,8 @@ CORS_ORIGIN=http://localhost:5173
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_NAME=itineria_db
-DB_USER=admin-user-itineria
-DB_PASSWORD=llha23_gg#9Fa
+DB_USER=root
+DB_PASSWORD=user-db-itineria
 JWT_SECRET=your-secret-key
 
 #lancia le migrations per il database
@@ -325,8 +325,8 @@ environment:
   DB_HOST: db-itineria
   DB_PORT: 3306
   DB_NAME: itineria_db
-  DB_USER: admin-user-itineria
-  DB_PASSWORD: llha23_gg#9Fa
+  DB_USER: root
+  DB_PASSWORD: user-db-itineria
   JWT_SECRET: your_local_secret_key
 ```
 
@@ -424,8 +424,8 @@ curl -X POST http://localhost:8080/api/auth/register \
 ### Credenziali Database in locale
 
 - **Database**: `itineria_db`
-- **Username**: `admin-user-itineria`
-- **Password**: `llha23_gg#9Fa`
+- **Username**: `root`
+- **Password**: `user-db-itineria`
 - **Host**: `localhost:3306`
 
 ---
