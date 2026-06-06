@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Card, Container } from "react-bootstrap";
-import roma from "../assets/colosseo_roma.jpeg";
+import roma from "../assets/colosseo_roma.jpg";
 import london from "../assets/london.jpg";
 import newyork from "../assets/newyork.jpg";
 import parigi from "../assets/parigi.jpg";
