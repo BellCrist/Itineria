@@ -1,5 +1,8 @@
 import { useRef } from "react";
 import { Card, Container } from "react-bootstrap";
+import roma from "../assets/colosseo_roma.jpeg";
+import london from "../assets/london.jpg";
+import newyork from "../assets/newyork.jpg";
 import parigi from "../assets/parigi.jpg";
 import siviglia from "../assets/siviglia.jpg";
 import "../css/ExperienceSlider.css";
@@ -10,9 +13,9 @@ function ExperienceSlider() {
     const itineraries = [
         { id: 1, title: "Parigi Classica", desc: "La Tour Eiffel e i segreti del Louvre.", img: parigi },
         { id: 2, title: "Siviglia Storica", desc: "Jamon e flamenco", img: siviglia },
-        { id: 3, title: "Roma Bella", desc: "Passeggiata imperiale tra Colosseo e Fori.", img: "https://picsum.photos/id/1016/400/500" },
-        { id: 4, title: "New York Skyline", desc: "Le luci di Manhattan viste da Brooklyn.", img: "https://picsum.photos/id/1018/400/500" },
-        { id: 5, title: "Londra Riverside", desc: "Dal Big Ben alla modernità della Tate.", img: "https://picsum.photos/id/1019/400/500" },
+        { id: 3, title: "Roma Bella", desc: "Passeggiata imperiale tra Colosseo e Fori.", img: roma },
+        { id: 4, title: "New York Skyline", desc: "Le luci di Manhattan viste da Brooklyn.", img: newyork },
+        { id: 5, title: "Londra Riverside", desc: "Dal Big Ben alla modernità della Tate.", img: london },
     ];
 
     const scroll = (direction) => {

@@ -2,6 +2,8 @@
 
 Una moderna applicazione web full-stack per creare, gestire e condividere itinerari di viaggio. Gli utenti possono pianificare i loro viaggi con waypoint dettagliati, salvare i propri itinerari e visualizzare i dettagli delle loro destinazioni.
 
+La web app è disponibile al seguente URL: https://travel-dream.duckdns.org/
+
 ---
 
 ## 📋 Indice
@@ -249,9 +251,14 @@ docker compose ps
 
 **Visualizza i log:**
 ```bash
-docker compose logs -f server    # Solo backend
-docker compose logs -f           # Tutti i servizi
+docker logs -f server-container    # Solo backend
+docker logs -f mysql-container     # Tutti i servizi
 ```
+
+(Il containe del database impiega sempre qualche attimo in più
+del container dell'app, quindi fin quando il mysql-container non sarà
+completamente caricato, localhost o 127.0.0.1 non risponderanno.
+Quindi utilizza i comandi dei log per vedere lo stato dei vari container)
 
 **Stop:**
 ```bash
