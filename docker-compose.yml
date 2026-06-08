@@ -38,7 +38,7 @@ services:
     command: sh -c "npx sequelize-cli db:migrate && npm run dev"
     volumes:
       # Mappa la cartella server locale con quella nel container
-      #- ./server:/app/server
+      - ./server:/app/server
       # Mappa la cartella client locale (se vuoi modificare il frontend in tempo reale)
       - ./client:/app/client
       # Evita che i node_modules locali sovrascrivano quelli Linux del container

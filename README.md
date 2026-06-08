@@ -10,16 +10,15 @@ La web app è disponibile al seguente URL: https://travel-dream.duckdns.org/
 
 - [Funzionalità](#funzionalità)
 - [Architettura](#architettura)
-- [Tecnologie](#tecnologie)
+- [Tecnologie](#tecnologie-utilizzate)
 - [Scelte Progettuali](#scelte-progettuali)
 - [Prerequisiti](#prerequisiti)
 - [Setup da Zero](#setup-da-zero)
 - [Esecuzione](#esecuzione)
-- [Docker](#docker)
-- [Testing](#testing)
+- [Variabili d'Ambiente](#variabili-dambiente)
+- [Pipeline CI/CD](#pipeline-cicd)
 - [Credenziali di Prova](#credenziali-di-prova)
 - [API Documentation](#api-documentation)
-- [Struttura del Progetto](#struttura-del-progetto)
 
 ---
 
@@ -134,6 +133,46 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 - **Docker** - Containerization
 - **Docker Compose** - Multi-container orchestration
 - **Nodemon** - Auto-reload in development
+
+---
+
+## 📦 Librerie di Terze Parti
+
+### Frontend
+| Libreria | Versione | Descrizione |
+|----------|----------|-------------|
+| **react** | ^19.2.4 | Libreria principale per la costruzione dell'interfaccia utente basata su componenti |
+| **react-dom** | ^19.2.4 | Entry point di React per il rendering nel DOM del browser |
+| **react-router-dom** | ^7.13.2 | Gestione del routing lato client per la navigazione SPA senza reload |
+| **bootstrap** | ^5.3.8 | Framework CSS per componenti UI responsive e pre-stilizzati |
+| **react-bootstrap** | ^2.10.10 | Wrapper React per i componenti Bootstrap con sintassi JSX |
+| **bootstrap-icons** | ^1.13.1 | Set di icone SVG di Bootstrap |
+| **react-bootstrap-icons** | ^1.11.6 | Wrapper React per le icone Bootstrap |
+| **react-select** | ^5.10.2 | Dropdown avanzato con ricerca e selezione multipla |
+| **js-cookie** | ^3.0.5 | Utility per la lettura, scrittura e cancellazione di cookie |
+| **vite** | ^8.0.1 | Build tool moderno e dev server con HMR istantanea |
+| **vite-plugin-pwa** | ^1.2.0 | Plugin Vite per abilitare le funzionalità Progressive Web App |
+
+### Backend
+| Libreria | Versione | Descrizione |
+|----------|----------|-------------|
+| **express** | ^5.2.1 | Framework web minimale per la creazione di server Node.js e API REST |
+| **sequelize** | ^6.37.8 | ORM per l'interazione con il database MySQL tramite modelli JavaScript |
+| **mysql2** | ^3.22.3 | Driver MySQL per Node.js ad alte prestazioni |
+| **bcrypt** | ^6.0.0 | Hashing sicuro di password con salt automatico |
+| **jsonwebtoken** | ^9.0.3 | Creazione e verifica di token JWT per l'autenticazione |
+| **cookie-parser** | ^1.4.7 | Middleware Express per il parsing automatico dei cookie |
+| **cors** | ^2.8.6 | Middleware Express per la gestione della Cross-Origin Resource Sharing |
+| **dotenv** | ^17.4.2 | Caricamento delle variabili d'ambiente da file .env |
+| **@aws-sdk/client-ssm** | ^3.1060.0 | Client AWS per l'accesso a Parameter Store (gestione secrets) |
+
+### Development
+| Libreria | Versione | Descrizione |
+|----------|----------|-------------|
+| **nodemon** | ^3.1.14 | Monitor di file Node.js che riavvia automaticamente il server su modifiche |
+| **sequelize-cli** | ^6.6.5 | CLI per Sequelize per la creazione e gestione di migration |
+| **eslint** | ^9.39.4 | Linter JavaScript per identificare e segnalare errori di codice |
+| **vite-plugin-react** | ^6.0.1 | Plugin Vite per il fast refresh e l'ottimizzazione React |
 
 ---
 
@@ -302,9 +341,9 @@ cd ..
 # Client
 cd client
 npm install --legacy-peer-deps
-(nel caso ci fossero problemi con i permessi dell'utente dovuti ad una vecchia esecuzione
+"(nel caso ci fossero problemi con i permessi dell'utente dovuti ad una vecchia esecuzione
 tramite il metodo 1 con docker, lancia il seguente comando:
-sudo chown -R $USER:$USER /path_del_progetto_in_locale/travel-diary/client)
+sudo chown -R $USER:$USER /path_del_progetto_in_locale/travel-diary/client)"
 cd ..
 ```
 
@@ -365,73 +404,22 @@ environment:
   <br>
 
 ---
-## 🧪 Testing
-
-### Test Manuali API
-
-Usa **Postman**, **Thunder Client** o **curl**:
-
-```bash
-# Registrazione
-curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Mario",
-    "surname": "Rossi",
-    "email": "mario@example.com",
-    "password": "SecurePass123!",
-    "country": "IT",
-    "city": "Roma",
-    "address": "Via Test 123",
-    "province": "RM",
-    "zipCode": "00100"
-  }'
-
-# Login
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "mario@example.com",
-    "password": "SecurePass123!"
-  }'
-
-# Ottenere lista itinerari (con token nei cookie)
-curl -X GET http://localhost:8080/api/itineraries \
-  -H "Cookie: accessToken=<YOUR_TOKEN>"
-```
-
----
 
 ## 👤 Credenziali di Prova
 
 ### Utente di Test
-
-Se il database è già pre-seeded:
-
-- **Email**: `test@example.com`
-- **Password**: `TestPassword123!`
-
-### Per Creare un Utente di Test
-
-Registrati tramite l'interfaccia web o usa curl:
-
-```bash
-curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Test",
-    "surname": "User",
-    "email": "test@example.com",
-    "password": "TestPassword123!",
-    "country": "IT",
-    "city": "Milano",
-    "address": "Via Test 456",
-    "province": "MI",
-    "zipCode": "20100"
-  }'
+```
+email: u.test@gmail.com
+password: 5Rh3q9SPjBaDf7z!j4$P
 ```
 
-### Credenziali Database in locale
+Questo utente può essere utilizzato per visualizzare le funzionalità
+dell'applicativo perchè contiene già dei dati e degli itinerari dimostrativi.
+Altrimenti è comunque possibile registrare un nuovo utente attraverso
+l'interfaccia grafica dell'app.
+
+
+### Credenziali Database in sviluppo locale
 
 - **Database**: `itineria_db`
 - **Username**: `root`
@@ -678,18 +666,6 @@ npm run db:migrate
 npx sequelize-cli migration:create --name add-new-column
 ```
 
----
-
-## 🐛 Troubleshooting
-
-### Errore connessione database
-```bash
-# Verifica che MySQL è in esecuzione
-mysql -u admin-user-itineria -p -h 127.0.0.1 itineria_db
-
-# Se usa Docker
-docker compose logs db-itineria
-```
 ---
 
 ## 📄 Licenza

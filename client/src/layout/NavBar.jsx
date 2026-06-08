@@ -80,8 +80,7 @@ function MainNavBar() {
                             </div>
                         </div>
 
-
-                        {/* 3. COLONNA DESTRA: Lente + Utente (Mobile) / Utente (Desktop) */}
+                        {/* COLONNA DESTRA: Lente + Utente (Mobile) / Utente (Desktop) */}
                         <div className="col-4 col-lg-3 d-flex justify-content-end align-items-center p-0 gap-2 gap-lg-3">
 
                             {/* Lente d'ingrandimento, visibile solo su mobile, che può far collassare la barra di ricerca */}
@@ -117,7 +116,7 @@ function MainNavBar() {
                         </div>
                     </div>
 
-                    {/* 5. TENDINA SEARCH BAR MOBILE */}
+                    {/* TENDINA SEARCH BAR MOBILE */}
                     <div className="w-100 d-lg-none px-3">
                         <Collapse in={showMobileSearch}>
                             <div id="mobile-search-collapse">
@@ -133,7 +132,11 @@ function MainNavBar() {
                         id={`offcanvasNavbar-expand-${expand}`}
                         aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
                         placement="start"
-                        style={{ backgroundColor: '#D2B48C' }}
+                        style={{
+                            backgroundColor: '#D2B48C',
+                            width: '240px',
+                            maxWidth: '240px'
+                        }}
                     >
                         <Offcanvas.Header closeButton>
                             <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
@@ -142,11 +145,11 @@ function MainNavBar() {
                         </Offcanvas.Header>
 
                         <Offcanvas.Body>
-                            <div className='d-lg-none d-flex flex-column mx-auto'>
-                                <Nav className="justify-content-center flex-grow-1 pe-3">
+                            <div className='d-lg-none d-flex flex-column'>
+                                <Nav className="justify-content-center">
                                     <Nav.Link as={NavLink} className="nav-item" to="/">Home</Nav.Link>
                                     <Nav.Link as={NavLink} className="nav-item" to="/itinerari">I nostri itinerari</Nav.Link>
-                                    <Nav.Link as={NavLink} className="nav-item" to="/about">About</Nav.Link>
+                                    <Nav.Link as={NavLink} className="nav-item" to="/about">porco dio</Nav.Link>
                                     <Nav.Link as={NavLink} className="nav-item" to="/contatti">Contatti</Nav.Link>
                                 </Nav>
                             </div>
