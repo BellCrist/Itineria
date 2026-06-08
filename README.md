@@ -8,17 +8,15 @@ La web app è disponibile al seguente URL: https://travel-dream.duckdns.org/
 
 ## 📋 Indice
 
-- [Funzionalità](#funzionalità)
-- [Architettura](#architettura)
-- [Tecnologie](#tecnologie-utilizzate)
-- [Scelte Progettuali](#scelte-progettuali)
-- [Prerequisiti](#prerequisiti)
-- [Setup da Zero](#setup-da-zero)
-- [Esecuzione](#esecuzione)
-- [Variabili d'Ambiente](#variabili-dambiente)
-- [Pipeline CI/CD](#pipeline-cicd)
-- [Credenziali di Prova](#credenziali-di-prova)
-- [API Documentation](#api-documentation)
+- [Funzionalità](#-funzionalità)
+- [Architettura](#️-architettura)
+- [Tecnologie](#️-tecnologie-utilizzate)
+- [Scelte Progettuali](#-scelte-progettuali)
+- [Prerequisiti](#-prerequisiti)
+- [Setup da Zero](#-setup-da-zero)
+- [Esecuzione](#️-2-esecuzione)
+- [Credenziali di Prova](#-credenziali-di-prova)
+- [API Documentation](#-api-documentation)
 
 ---
 
