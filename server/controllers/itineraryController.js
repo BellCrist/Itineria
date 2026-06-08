@@ -200,25 +200,27 @@ const deleteItinerary = async (req, res) => {
 const searchItineraries = async (req, res) => {
     const { destination } = req.query;
     if (!destination) {
-        return res.status(400).json({ error: "Inserisci un termine di ricerca" });
+        return res.status(400).json({ error: "Inserisci una destinazione" });
     }
 
     try {
         const itineraries = await db.Itinerary.findAll({
             where: {
                 privateItinerary: 0,
-
-                // Sequelize.where esegue la funzione MySQL JSON_SEARCH in modo sicuro
                 [Op.and]: db.sequelize.where(
                     db.sequelize.fn(
-                        'JSON_SEARCH',
-                        db.sequelize.col('waypoints'),
-                        'one',                         // Cerca la prima occorrenza
-                        `%${destination}%`,
-                        null,                          // Nessun carattere di escape speciale
-                        db.sequelize.Sequelize.literal("'$[*].destination'")             // Cerca solo nelle chiavi 'destination'
+                        'LOWER',                                        // Converte la stringa in minuscolo per fare un confronto case-insensitive
+                        db.sequelize.fn(
+                            'JSON_UNQUOTE',                             // Rimuove le virgolette dai JSON estratti
+                            db.sequelize.fn(
+                                'JSON_EXTRACT',                         // funzione nativa di Mysql per navigare un json
+                                db.sequelize.col('waypoints'),
+                                db.sequelize.literal("'$[*].destination'")  // Seleziona tutti gli elementi destination dei vari waypoints
+                            )
+                        )
                     ),
-                    { [Op.not]: null } // Se JSON_SEARCH non restituisce NULL, significa che c'è un match
+                    Op.like,
+                    `%${destination.toLowerCase()}%`
                 )
             }
         });

@@ -10,7 +10,7 @@ function SearchBar() {
     const navigate = useNavigate();
 
     const handleSearch = (destination) => {
-        if (!destination) return alert("Inserisci qualcosa!");
+        if (!destination) return alert("Inserisci una destinazione!");
         navigate(`/search?destination=${encodeURIComponent(destination)}`);
     };
 
