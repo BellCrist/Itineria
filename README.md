@@ -302,7 +302,7 @@ docker logs -f server-container    # Solo backend
 docker logs -f mysql-container     # Tutti i servizi
 ```
 
-(Il containe del database impiega sempre qualche attimo in più
+(Il container del database impiega sempre qualche attimo in più
 del container dell'app, quindi fin quando il mysql-container non sarà
 completamente caricato, localhost o 127.0.0.1 non risponderanno.
 Quindi utilizza i comandi dei log per vedere lo stato dei vari container)
@@ -313,7 +313,8 @@ docker compose down
 ```
 Questa sarebbe la struttura finale:
 <br>
-<img width="451" height="321" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/e2195cc1-2671-4cbd-8c36-c5b33f4e08e4" />
+<img width="511" height="361" alt="docker-container-architecture drawio drawio" src="https://github.com/user-attachments/assets/efe2f7bb-c925-48b2-8283-906689ae8ad9" />
+
 
 
 ### Metodo 2: Sviluppo Locale (2 terminali)
