@@ -149,7 +149,7 @@ function MainNavBar() {
                                 <Nav className="justify-content-center">
                                     <Nav.Link as={NavLink} className="nav-item" to="/">Home</Nav.Link>
                                     <Nav.Link as={NavLink} className="nav-item" to="/itinerari">I nostri itinerari</Nav.Link>
-                                    <Nav.Link as={NavLink} className="nav-item" to="/about">porco dio</Nav.Link>
+                                    <Nav.Link as={NavLink} className="nav-item" to="/about">About</Nav.Link>
                                     <Nav.Link as={NavLink} className="nav-item" to="/contatti">Contatti</Nav.Link>
                                 </Nav>
                             </div>

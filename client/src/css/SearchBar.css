@@ -3,25 +3,41 @@
     flex-direction: row !important;
     align-items: center !important;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: linear-gradient(90deg, #d3d3d3 0%, #b0b0b0 100%);
-    padding: 3px;
+    border: 1px solid rgba(93, 79, 79, 0.8);
+    background: linear-gradient(90deg, #d3d3d3 0%, #e8e8e8 100%);
+    padding: 4px;
     display: flex !important;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(208, 227, 1, 0.1);
 }
 
-.custom-search-pill .form-control {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1.1rem;
-    font-weight: 300;
-    padding-left: 20px;
-    border: none;
-    box-shadow: none;
+/* Stile blindato per spostare il testo e il placeholder */
+.input-group.custom-search-pill input.search-input-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: rgb(141, 47, 3) !important; 
+    font-size: 1.1rem !important;
+    font-weight: 500 !important;
+    padding-left: 15px !important; 
+    text-indent: 10px !important; 
+    margin-left: 5px !important;
 }
 
+/* Assicuriamoci che anche il placeholder si sposti */
+.input-group.custom-search-pill input.search-input-text::placeholder {
+    color: rgb(1, 7, 36);
+    font-weight: 400;
+    opacity: 1;
+}
+
+/* stile specifico per il placeholder */
+.custom-search-pill .form-control::placeholder {
+    color: black;
+    font-weight: 400;
+    opacity: 1;
+}
+
+/* bottone di ricerca */
 .search-btn {
     border-radius: 50% !important;
     width: 40px;
@@ -31,4 +47,5 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    margin-right: 2px;
 }

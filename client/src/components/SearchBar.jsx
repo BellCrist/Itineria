@@ -20,9 +20,9 @@ function SearchBar() {
             style={{ maxWidth: '600px', margin: '0 auto' }}
         >
             <Form.Control
+                className="search-input-text"
                 type="search"
-                placeholder="Cerca un itinerario"
-                className="border-start-0 ps-0"
+                placeholder="Ricerca itinerari per destinazione"
                 aria-label="Search"
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={(e) => {

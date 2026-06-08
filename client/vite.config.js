@@ -82,7 +82,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // Assicurati che la porta del backend sia questa
+        target: 'http://localhost:8080',
         changeOrigin: true,
         secure: false,
       },

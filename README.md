@@ -279,7 +279,17 @@ docker compose up -d --build
 docker compose up -d
 ```
 
-**Accedi a:** http://localhost:8080
+**Avvio del frontend**
+```bash
+cd client
+npm run dev
+```
+
+**Accedi a:** http://localhost:5173
+
+La scelta di runnare il client al di fuori del container in fase di sviluppo permette
+di osservare immediatemente le modifiche applicate al frontend sfruttando l'HMR di Vite,
+senza dover ogni volta rifare la build del progetto.
 
 **Verifica che i container sono in esecuzione**
 ```bash
