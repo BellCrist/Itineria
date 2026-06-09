@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2 via AWS SSM (OIDC)
+name: Deploy to AWS Auto Scaling via Instance Refresh (OIDC)
 
 on:
   push:
@@ -15,25 +15,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Scarica il codice
+      # Scarica il codice
       - name: Checkout del codice
         uses: actions/checkout@v4
 
-      # 2. Autenticazione sicura su AWS tramite OIDC
+      # Autenticazione sicura su AWS tramite OIDC
       - name: Configura AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 3. Login su Amazon ECR
+      # Login su Amazon ECR
       - name: Login su Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         with:
           mask-password: "true"
 
-      # 4. Build e Push dell'immagine Docker
+      # Build e Push dell'immagine Docker
       - name: Build e Push dell'immagine su ECR
         env:
           ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
@@ -43,17 +43,9 @@ jobs:
           docker build --no-cache --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # 5. Deploy tramite AWS Systems Manager (SSM)
-      - name: Esegui Deploy via AWS SSM Run Command
+      # Avvia il Refresh delle Istanze nell'Auto Scaling Group
+      - name: Esegui Deploy via AWS Instance Refresh
         run: |
-          aws ssm send-command \
-            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
-            --document-name "AWS-RunShellScript" \
-            --comment "Deploying latest docker image via GitHub Actions" \
-            --parameters 'commands=[
-              "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_REGISTRY }}'",
-              "docker pull '${{ secrets.ECR_REGISTRY }}'/travel-diary:latest",
-              "docker stop travel-diary || true",
-              "docker rm travel-diary || true",
-              "docker run -d --name travel-diary -p 8080:8080 --env-file /home/ubuntu/.env.production '${{ secrets.ECR_REGISTRY }}'/travel-diary:latest"
-            ]'
+          aws ec2 start-instance-refresh \
+            --auto-scaling-group-name "${{ secrets.AWS_ASG_NAME }}" \
+            --preferences '{"MinHealthyPercentage": 50}'

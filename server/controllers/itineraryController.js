@@ -209,7 +209,7 @@ const searchItineraries = async (req, res) => {
                 privateItinerary: 0,
                 [Op.and]: db.sequelize.where(
                     db.sequelize.fn(
-                        'LOWER',                                        // Converte la stringa in minuscolo per fare un confronto case-insensitive
+                        'LOWER',                                        // Converte la stringa in minuscolo per fare un confronto non case-sensitive
                         db.sequelize.fn(
                             'JSON_UNQUOTE',                             // Rimuove le virgolette dai JSON estratti
                             db.sequelize.fn(
