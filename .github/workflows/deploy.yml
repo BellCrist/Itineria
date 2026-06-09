@@ -46,6 +46,6 @@ jobs:
       # Avvia il Refresh delle Istanze nell'Auto Scaling Group
       - name: Esegui Deploy via AWS Instance Refresh
         run: |
-          aws ec2 start-instance-refresh \
+          aws autoscaling start-instance-refresh \
             --auto-scaling-group-name "${{ secrets.AWS_ASG_NAME }}" \
             --preferences '{"MinHealthyPercentage": 50}'
