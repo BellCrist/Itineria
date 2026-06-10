@@ -239,6 +239,11 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 
 ---
 
+## Pipeline CI/CD
+testo d'esempio da modificare
+
+---
+
 ## 📋 Prerequisiti
 
 ### Per Docker (Consigliato)
