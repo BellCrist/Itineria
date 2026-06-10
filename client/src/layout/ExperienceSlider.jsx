@@ -14,7 +14,7 @@ function ExperienceSlider() {
         { id: 1, title: "Parigi", desc: "La Tour Eiffel e i segreti del Louvre.", img: parigi },
         { id: 2, title: "Siviglia", desc: "Jamon e flamenco", img: siviglia },
         { id: 3, title: "Roma", desc: "Passeggiata imperiale tra Colosseo e Fori.", img: roma },
-        { id: 4, title: "New York Skyline", desc: "Le luci di Manhattan viste da Brooklyn.", img: newyork },
+        { id: 4, title: "New York", desc: "Le luci di Manhattan viste da Brooklyn.", img: newyork },
         { id: 5, title: "Londra Riverside", desc: "Dal Big Ben alla modernità della Tate.", img: london },
     ];
 
