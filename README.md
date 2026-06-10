@@ -240,7 +240,9 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 ---
 
 ## Pipeline CI/CD
-testo d'esempio da modificare
+La pipeline che inizialmente prevedeva l'utilizzo delle github action con
+l'agente SSM di AWS, ora è stata adattata per poter caricare su tutte le
+istanze attive l'immagine corretta e aggiornata.
 
 ---
 
