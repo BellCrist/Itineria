@@ -400,7 +400,8 @@ environment:
     3.4 avvio del container
   
   <br>
-  Immagine da sostituire con il nuovo flusso
+  <img width="735" height="676" alt="new-deploy-pipeline" src="https://github.com/user-attachments/assets/bd262f89-f63e-4d59-9e8d-3da81f2ccf7c" />
+
   <br>
 
 ---
@@ -421,7 +422,8 @@ Di seguito una breve descrizione di come sono state organizzate tutte le varie e
     3. Permettere all'admin di potersi collegare da remoto al database. In questo caso viene sfruttata la macchina EC2
       che funge da tunnel ssh.
 <br>
-//TODO immagine da ricaricare corretta.
+<img width="998" height="801" alt="new-production-system-structure" src="https://github.com/user-attachments/assets/5f9e014d-49e2-496c-a23c-75970d14243e" />
+
 <br>
 
 Il servizio di Dynamic DNS ospita il dominio pubblico travel-dream.ddnsfree.com. Invece di mappare un indirizzo IP statico (che cambierebbe a ogni ricreazione delle istanze),
