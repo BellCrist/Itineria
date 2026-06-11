@@ -2,7 +2,7 @@
 
 Una moderna applicazione web full-stack per creare, gestire e condividere itinerari di viaggio. Gli utenti possono pianificare i loro viaggi con waypoint dettagliati, salvare i propri itinerari e visualizzare i dettagli delle loro destinazioni.
 
-La web app è disponibile al seguente URL: https://travel-dream.duckdns.org/
+La web app è disponibile al seguente URL: https://travel-dream.ddnsfree.com/
 
 ---
 
@@ -12,7 +12,8 @@ La web app è disponibile al seguente URL: https://travel-dream.duckdns.org/
 - [Architettura](#️-architettura)
 - [Tecnologie](#️-tecnologie-utilizzate)
 - [Scelte Progettuali](#-scelte-progettuali)
-- [CI/CD pipeline](#pipeline)
+- [CI/CD pipeline](#pipeline-cicd)
+- [Configurazione cloud](#configurazione-cloud)
 - [Prerequisiti](#-prerequisiti)
 - [Setup da Zero](#-setup-da-zero)
 - [Esecuzione](#️-2-esecuzione)
@@ -74,25 +75,6 @@ L'applicazione segue un'architettura **client-server monolitica** con separazion
 └─────────────────────────────────────────────────────────────┘
 ```
 <img width="731" height="540" alt="system architecture drawio" src="https://github.com/user-attachments/assets/a6a0fd92-c2e6-46ae-9971-b28b6538f902" />
-<br>
-
-In produzione queste entità sono state organizzate con la seguente struttura:
-  - Immagine docker caricata su AWS ECR (Elastic Container Registry)
-  - In una macchina EC2 viene eseguito il container dell'app
-  - Sempre su EC2 è stato installato il web server nginx che agisce anche da reverse proxy
-  - è stato riservato il sotto dominio **travel-dream.duckdns.org**
-  - Al web server è stato applicato un certificato SSL per la comunicazione tramite https e sicurezza dei dati
-  - Il database mysql è in esecuzione all'interno del servizio AWS RDS
-  - Sono state configurate delle specifiche regole all'interno del security group per:
-    1. Far collegare l'admin del sistema da remoto alla macchina EC2 in ssh tramite l'apposita chiave privata.
-    2. Permettere alla macchina EC2 di ricevere richieste sulla porta 80 e 443 da qualsiasi indirizzo ip
-    3. Permettere all'admin di potersi collegare da remoto al database. In questo caso viene sfruttata la macchina EC2
-      che funge da tunnel ssh.
-    4. Alla macchina EC2 ho collegato un ip pubblico "fisso", in modo che se il server dovesse riavviarsi, anche cambiando ip,
-      il riferimento pubblico rimarrebbe lo stesso. Per questa funzionalità ho utilizzato il servizio Elastic IP di AWS. Ho
-      dovuto eseguire questa configurazione nel momento in cui sono andato a riservare un dominio pubblico su DuckDns.
-<br>
-<img width="852" height="648" alt="production_final_architecture" src="https://github.com/user-attachments/assets/225f65c4-53a3-46a5-acc1-a9974c4b6d90" />
 <br>
 
 ## Flusso di Autenticazione
@@ -236,15 +218,6 @@ In produzione queste entità sono state organizzate con la seguente struttura:
 ### 7. **Progressive Web App**
 - **Offline First**: Service worker per caching di alcune risorse
 - **Installabilità**: Web manifest per "Add to Home Screen"
-
----
-
-## Pipeline CI/CD
-La pipeline che inizialmente prevedeva l'utilizzo delle github action con
-l'agente SSM di AWS, ora è stata adattata per poter caricare su tutte le
-istanze attive l'immagine corretta e aggiornata.
- è stata generata una nuova immagine AMI con il file
- .env.production corretto.
 
 ---
 
@@ -406,24 +379,69 @@ environment:
   di produzione AWS.
   Quindi per ogni push che viene eseguito nel branch main viene attivata la pipeline.
   Il flusso della pipeline è quello presente nella seguente immagine.
+
   La parte più difficile è stata quella di far comunicare github con i relativi servizi
   AWS. Questo è stato possibile configurando l'identity provider Open ID Connect e associandolo
   ad uno specifico IAM Role di tipo web identity, con i permessi per comunicare con il
   container registry e per inviare comandi all'agente SSM di AWS.
+  Inoltre sulla repository github sono stati utilizzati i secrets per conservare in maniera sicura
+  le credenziali e le informazioni sensibili per il flusso.
   
-  Dopodichè anche la macchina EC2 è stata abilitata a comunicare con l'SSM agent e sono stati
-  configurati i secrets all'interno della repository github per conservare in maniera sicura
-  gli endpoint e le informazioni utili per comunicare con i servizi AWS.
-
-  Infine il flusso specifico delle operazioni da eseguire è stato riportato all'interno del
-  file deploy.yml dentro la cartella .github/workflows del progetto.
+  1. GitHub Actions esegue il login su Amazon ECR e carica la nuova immagine creata
+  2. Tra le github action viene ordinato il refresh delle istanze all'auto scaling configurato su AWS
+  3. L'Auto Scaling Group distrugge progressivamente le vecchie istanze EC2 e ne accende di nuove basate
+  sul Launch Template di default. Ogni nuova istanza nasce con un IAM Role che le permette di comunicare
+  con AWS ECR.
+  Il template che viene utilizzato per queste istanze contiene alcune operazioni fondamentali per il flusso
+  della pipeline dentro la sezione "User data", come:
+    3.1 configurazione nginx
+    3.2 autenticazione su ECR
+    3.3 pull dell'immagine
+    3.4 avvio del container
   
   <br>
-  <img width="757" height="676" alt="deploy pipeline" src="https://github.com/user-attachments/assets/846fc15c-7c7b-449b-9400-11a730485008" />
+  Immagine da sostituire con il nuovo flusso
   <br>
 
 ---
 
+## Configurazione cloud
+
+Di seguito una breve descrizione di come sono state organizzate tutte le varie entità per costruire e deployare l'applicativo:
+  - Immagine docker caricata su AWS ECR (Elastic Container Registry)
+  - In una macchina EC2 viene eseguito il container dell'app
+  - Sempre su EC2 è stato installato il web server nginx che agisce anche da reverse proxy
+  - è stato riservato il sotto dominio **travel-dream.ddnsfree.com**
+  - Per il certificato SSL è stato utilizzato il servizio AWS Certificate Manager
+  - Il database mysql è in esecuzione all'interno del servizio AWS RDS, disponibile all'interno della
+    stessa VPC delle istanze EC2 e accessibile dalle regole del security group delle istanze EC2.
+  - Sono state configurate delle specifiche regole all'interno del security group per:
+    1. Far collegare l'admin del sistema da remoto alla macchina EC2 in ssh tramite l'apposita chiave privata.
+    2. Permettere alla macchina EC2 di ricevere richieste sulla porta 80 dall'application load balancer
+    3. Permettere all'admin di potersi collegare da remoto al database. In questo caso viene sfruttata la macchina EC2
+      che funge da tunnel ssh.
+<br>
+//TODO immagine da ricaricare corretta.
+<br>
+
+Il servizio di Dynamic DNS ospita il dominio pubblico travel-dream.ddnsfree.com. Invece di mappare un indirizzo IP statico (che cambierebbe a ogni ricreazione delle istanze),
+su Dynu ho configurato un record CNAME che punta direttamente all'endpoint DNS dell'Application Load Balancer (ALB) di AWS.
+
+L'ALB funge da unico punto di contatto pubblico con l'infrastruttura.
+È configurato con due listener: uno sulla porta 80 (HTTP) e uno sulla porta 443 (HTTPS).
+L'application load balancer si occupa anche della gestione del certificato SSL ricavato da AWS Certificate Manager.
+L'ALB riceve il traffico cifrato dagli utenti, lo decifra e lo inoltra in HTTP normale verso la rete interna (VPC).
+Nel load balancer sono configurate 2 Availability Zones: eu-sout-1c e eu-south-1a, poi in base al traffico di rete
+smista le richieste nelle varie istanze disponibili all'interno del target group.
+
+Le varie istanze che vengono generate o disattivate sono gestite dall'auto scaling.
+Questo servizio controlla sempre le richieste nelle varie istanze attive ed in base al traffico
+decice di attivare nuove istanze o disattivare quelle esistenti in base a delle regole impostate (nel mio caso il range 1-4).
+Le nuove istanze che l'auto scaling genera si avviano utilizzando il launch template di default con
+all'interno un IAM Role, un'immagine AMI base da cui partire e dei comandi da lanciare utili
+per l'avvio del container dell'app.
+
+---
 ## 👤 Credenziali di Prova
 
 ### Utente di Test
@@ -452,7 +470,7 @@ l'interfaccia grafica dell'app.
 ### Base URL
 ```
 Development: vedere i vari riferimenti in base alla modalità di esecuzione dell'app in locale
-Production: https://travel-dream.duckdns.org
+Production: https://travel-dream.ddnsfree.com
 ```
 
 ### Autenticazione
