@@ -374,9 +374,8 @@ environment:
 ---
 ## Pipeline CI/CD
 
-  Per organizzare la pipeline di continuous integration continuous delivery/deployment
-  sono state combinate le funzionalità di github actions con la struttura presente nell'ambiente
-  di produzione AWS.
+  Per organizzare la pipeline CI/CD sono state combinate le funzionalità di github actions
+  con la struttura presente nell'ambiente cloud di AWS.
   Quindi per ogni push che viene eseguito nel branch main viene attivata la pipeline.
   Il flusso della pipeline è quello presente nella seguente immagine.
 
