@@ -12,30 +12,30 @@ function NewItineraryForm() {
     const [tripName, setTripName] = useState('');
     const [tripDescription, setTripDescription] = useState('');
     const [waypoints, setWaypoints] = useState([
-        { destination: '', date: '', time: '', notes: '' } // Partiamo con una tappa vuota
+        { destination: '', date: '', time: '', notes: '' }
     ]);
     const [privateItinerary, setPrivateItinerary] = useState(false);
 
-    // 2. Funzione per aggiungere un nuovo waypoint all'array
+    // Funzione per aggiungere un nuovo waypoint all'array
     const addWaypoint = () => {
         setWaypoints([...waypoints, { destination: '', date: '', time: '', notes: '' }]);
     };
 
-    // 3. Funzione per rimuovere un waypoint
+    // Funzione per rimuovere un waypoint
     const removeWaypoint = (index) => {
         const newWaypoints = [...waypoints];
         newWaypoints.splice(index, 1);
         setWaypoints(newWaypoints);
     };
 
-    // 4. Funzione per aggiornare i valori di un singolo waypoint
+    // Funzione per aggiornare i valori di un singolo waypoint
     const handleWaypointChange = (index, field, value) => {
         const newWaypoints = [...waypoints];
         newWaypoints[index][field] = value;
         setWaypoints(newWaypoints);
     };
 
-    // 5. Gestione del submit finale
+    // Gestione del submit finale
     const handleSubmit = async (e) => {
         e.preventDefault();
 

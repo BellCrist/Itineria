@@ -21,7 +21,7 @@ const envMap = {
 };
 const normalizedEnv = envMap[env] || 'development';
 
-// Importiamo la configurazione dinamica che legge le variabili d'ambiente
+// Importo la configurazione dinamica che legge le variabili d'ambiente
 import configData from '../config/config.js';
 const config = configData[normalizedEnv];
 

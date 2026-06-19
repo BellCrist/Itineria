@@ -16,9 +16,8 @@ export const AuthProvider = ({ children }) => {
             return;
         }
 
-        /**
-         * Se l'access token è scaduto, chiamo il refresh.
-         */
+
+        //Se l'access token è scaduto, chiamo il refresh.
         const refreshAccessToken = async () => {
             try {
                 const response = await fetch('/api/auth/refresh', {
@@ -48,8 +47,6 @@ export const AuthProvider = ({ children }) => {
                 });
 
                 if (response.status === 401 || response.status === 403) {
-                    // const xx = await response.json()
-                    // console.log(xx.message);
                     const refreshed = await refreshAccessToken();
                     if (refreshed) {
                         response = await fetch('/api/auth/me', {

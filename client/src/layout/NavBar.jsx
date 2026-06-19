@@ -32,7 +32,7 @@ function MainNavBar() {
 
                     <div className="row w-100 align-items-center m-0 py-2 px-1 px-lg-3">
 
-                        {/* 1. COLONNA SINISTRA: Hamburger (Mobile) / Logo (Desktop) */}
+                        {/* COLONNA SINISTRA: Hamburger (Mobile) / Logo (Desktop) */}
                         <div className="col-4 col-lg-3 d-flex align-items-center justify-content-start p-0">
                             {/* Toggle visibile solo su mobile */}
                             <div className='d-lg-none'>
@@ -52,7 +52,7 @@ function MainNavBar() {
                         </div>
 
 
-                        {/* 2. COLONNA CENTRALE: Logo (Mobile) / SearchBar + NavLinks (Desktop) */}
+                        {/* COLONNA CENTRALE: Logo (Mobile) / SearchBar + NavLinks (Desktop) */}
                         <div className="col-4 col-lg-6 d-flex flex-column align-items-center justify-content-center p-0">
 
                             {/* Logo mobile al centro */}

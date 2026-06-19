@@ -23,7 +23,7 @@
     margin-left: 5px !important;
 }
 
-/* Assicuriamoci che anche il placeholder si sposti */
+/* Spostamento del placeholder */
 .input-group.custom-search-pill input.search-input-text::placeholder {
     color: rgb(161, 134, 154);
     font-weight: 400;

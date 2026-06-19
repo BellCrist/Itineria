@@ -82,16 +82,16 @@ function ItineraryDetails({ id }) {
     const handleWaypointChange = (index, field, value) => {
         setItineraryDetails((prevDetails) => {
 
-            // 1. Copiamo l'array usando l'ultimissimo stato garantito (prevDetails)
+            // copio l'array usando l'ultimissimo stato garantito (prevDetails)
             const updatedWaypoints = [...prevDetails.waypoints];
 
-            // 2. Aggiorniamo l'elemento specifico
+            // Aggiorno l'elemento specifico
             updatedWaypoints[index] = {
                 ...updatedWaypoints[index],
                 [field]: value
             };
 
-            // 3. Ritorniamo il nuovo oggetto completo
+            // ritorno il nuovo oggetto completo
             return {
                 ...prevDetails,
                 waypoints: updatedWaypoints
@@ -124,7 +124,7 @@ function ItineraryDetails({ id }) {
     }
 
 
-    /** Impostando l'oggetto a null disabilita l'edit del campo */
+    /** Impostando l'oggetto a null, disabilita l'edit del campo */
     const handleBlur = async (e) => {
         setEditingField(null);
     }

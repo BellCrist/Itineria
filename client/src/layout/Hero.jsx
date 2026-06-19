@@ -13,7 +13,7 @@ function Hero() {
             <div className="hero-content">
                 <h1 className="hero-title">
                     <span className='brand-bg-pulse'>
-                        TRAVEL DIARY
+                        TRAVEL DREAM
                     </span>
                     <br />Il tuo itinerario di viaggio, <br />
                     <span>tutto in unico posto.</span>
