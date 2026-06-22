@@ -38,7 +38,10 @@ const getItineraryById = async (req, res) => {
         const result = await db.Itinerary.findOne({
             where: {
                 id: id,
-                userId: userData.id
+                /** Al momento vengono resi disponibili tutti gli itinerari pubblici, anche di altri utenti.
+                 * TODO Impostare regole e permessi per visualizzazione e modifica di itinerari di altri utenti.
+                */
+                //userId: userData.id
             }
         });
 
